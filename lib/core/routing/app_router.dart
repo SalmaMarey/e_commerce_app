@@ -1,6 +1,7 @@
 
 import 'package:e_commerce_app/core/routing/routes.dart';
-import 'package:e_commerce_app/features/splash_onboarding/onboarding_screen.dart';
+import 'package:e_commerce_app/features/splash_onboarding/screens/onboarding_screen.dart';
+import 'package:e_commerce_app/features/splash_onboarding/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -9,31 +10,23 @@ class AppRouter {
     switch (settings.name) {
       case Routes.onBoarding:
         return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
+          builder: (_) =>  const OnboardingScreen(),
+        );
+       case Routes.start:
+        return MaterialPageRoute(
+          builder: (_) =>  const StartScreen(),
         );
       
 
 
-      // case Routes.favourite:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const FavoriteScreen(),
-      //   );
-      // case Routes.profile:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const ProfileScreen(),
-      //   );
-
-      // case Routes.settings:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const Placeholder(),
-      //   );
+      
 
     
 
   
 
  default:
-        // Fallback or error handling
+      
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
             body: Center(
