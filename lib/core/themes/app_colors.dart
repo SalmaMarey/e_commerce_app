@@ -7,9 +7,8 @@ class AppColors {
   static const Color primaryColor = Color(0xff004CFF);
   static const Color scaffoldBackgroundLightColor = Color(0xffFFFFFF);
   static const Color textColor = Color(0xff202020);
-  // static const Color grey = Color(0xff8A8A8A);
+  static const Color textForm = Color.fromARGB(255, 228, 227, 227);
   static const Color inActiveDots = Color(0xFFD9D9D9);
-  // static const Color logoutColor = Color(0xFFFF0000); 
+  // static const Color logoutColor = Color(0xFFFF0000);
   //  static const Color grey0 = Color(0xFFDEDEDE);
-
 }

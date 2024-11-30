@@ -25,6 +25,11 @@ class AppTextStyles {
         color: AppColors.textColor,
         fontWeight: FontWeight.bold,
       );
+  static TextStyle get font50Bold => TextStyle(
+        fontSize: 50.sp,
+        color: AppColors.textColor,
+        fontWeight: FontWeight.bold,
+      );
   static TextStyle get font16Medium => TextStyle(
         fontSize: 16.sp,
         color: AppColors.textColor,
@@ -54,9 +59,10 @@ class AppTextStyles {
         fontSize: 20.sp,
         fontWeight: FontWeight.bold,
       );
-  static TextStyle get font16Regular => TextStyle(
-        fontSize: 16.sp,
+  static TextStyle get font19Regular => TextStyle(
+        fontSize: 19.sp,
         fontWeight: FontWeight.w400,
+        color: AppColors.textColor,
       );
   static TextStyle get font14Regular => TextStyle(
         fontSize: 14.sp,

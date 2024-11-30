@@ -26,7 +26,7 @@ class Assets {
   /// assets/fonts/Inter/Inter_28pt-SemiBold.ttf
   static const String fontsInterInter28ptSemiBold =
       "assets/fonts/Inter/Inter_28pt-SemiBold.ttf";
-      
+
   static const String logoApp = "assets/images/logo.png";
   static const String onboard_1 = "assets/images/Onboard_1.png";
   static const String onboard_2 = "assets/images/Onboard_2.png";
@@ -39,4 +39,7 @@ class Assets {
   static const String shape2 = "assets/shapes/shape_2.png";
   static const String shape3 = "assets/shapes/shape_3.png";
   static const String circleShape = "assets/shapes/circle_shape.png";
+  static const String login = "assets/images/login.png";
+  static const String register = "assets/images/register.jpg";
+  static const String uploadPhoto = "assets/images/Upload_Photo.png";
 }
