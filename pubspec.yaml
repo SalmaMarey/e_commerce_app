@@ -42,6 +42,11 @@ dependencies:
   flutter_native_splash: ^2.4.0
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
+  firebase_auth: ^5.2.0
+  cloud_firestore: ^5.4.0
+  firebase_core: ^3.8.0
+  dio: ^5.7.0
+  firebase_data_connect: ^0.1.2+5
 
 dev_dependencies:
   flutter_test:
