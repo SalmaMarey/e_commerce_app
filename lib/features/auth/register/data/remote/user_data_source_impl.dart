@@ -10,6 +10,6 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> saveUser(UserModel user) async {
-    await firestore.collection('users').doc(user.id).set(user.toJson());
+    await firestore.collection('e_users').doc(user.id).set(user.toJson());
   }
 }

@@ -1,17 +1,16 @@
-import 'package:e_commerce_app/features/auth/register/domain/user_repo.dart';
+import 'package:e_commerce_app/features/auth/register/domain/usecases/register_use_case.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_event.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class UserBloc extends Bloc<UserEvent, UserState> {
-  final UserRepository userRepository;
+  final RegisterUseCase registerUseCase;
 
-  UserBloc(this.userRepository) : super(UserInitial()) {
+  UserBloc(this.registerUseCase) : super(UserInitial()) {
     on<SaveUserEvent>((event, emit) async {
       emit(UserLoading());
       try {
-        await userRepository.saveUser(event.user);
+        await registerUseCase(event.user);
         emit(UserSuccess());
       } catch (e) {
         emit(UserFailure(e.toString()));
