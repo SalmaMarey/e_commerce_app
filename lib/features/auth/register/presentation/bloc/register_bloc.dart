@@ -3,17 +3,17 @@ import 'package:e_commerce_app/features/auth/register/presentation/bloc/register
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserBloc extends Bloc<UserEvent, UserState> {
+class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase registerUseCase;
 
-  UserBloc(this.registerUseCase) : super(UserInitial()) {
-    on<SaveUserEvent>((event, emit) async {
-      emit(UserLoading());
+  RegisterBloc(this.registerUseCase) : super(RegisterInitial()) {
+    on<SaveRegisterEvent>((event, emit) async {
+      emit(RegisterLoading());
       try {
         await registerUseCase(event.user);
-        emit(UserSuccess());
+        emit(RegisterSuccess());
       } catch (e) {
-        emit(UserFailure(e.toString()));
+        emit(RegisterFailure(e.toString()));
       }
     });
   }

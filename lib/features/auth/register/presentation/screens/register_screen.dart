@@ -4,11 +4,11 @@ import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
+import 'package:e_commerce_app/core/utils/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_bloc.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_state.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/widgets/done_button.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/widgets/image_picker%20.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/widgets/registrayion_field.dart';
+import 'package:e_commerce_app/features/auth/register/presentation/widgets/register_button.dart';
+import 'package:e_commerce_app/features/auth/register/presentation/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,12 +31,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di<UserBloc>(),
-      child: BlocConsumer<UserBloc, UserState>(listener: (context, state) {
-        if (state is UserSuccess) {
+      create: (_) => di<RegisterBloc>(),
+      child: BlocConsumer<RegisterBloc, RegisterState>(listener: (context, state) {
+        if (state is RegisterSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Registration Successful!')));
-        } else if (state is UserFailure) {
+        } else if (state is RegisterFailure) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 54.h,
                         ),
-                        RegistrationField(
+                        CustomTextField(
                           controller: emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -97,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        RegistrationField(
+                        CustomTextField(
                           controller: phoneController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        RegistrationField(
+                        CustomTextField(
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 77.h,
                         ),
-                         DoneButton(
+                         RegisterButton(
                             formKey: formKey,
                             emailController: emailController,
                             phoneController: phoneController,

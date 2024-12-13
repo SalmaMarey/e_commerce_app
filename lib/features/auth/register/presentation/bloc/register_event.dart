@@ -2,10 +2,10 @@ import 'package:e_commerce_app/core/models/user_model.dart';
 
 
 
-abstract class UserEvent {}
+abstract class RegisterEvent {}
 
-class SaveUserEvent extends UserEvent {
+class SaveRegisterEvent extends RegisterEvent {
   final UserModel user;
 
-  SaveUserEvent(this.user);
+  SaveRegisterEvent(this.user);
 }

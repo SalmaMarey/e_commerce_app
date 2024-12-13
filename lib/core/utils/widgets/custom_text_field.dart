@@ -2,21 +2,21 @@ import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RegistrationField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
 
-  const RegistrationField({
+  const CustomTextField({
     super.key,
     required this.controller,
     required this.labelText,
     this.validator,
   });
   @override
-  State<RegistrationField> createState() => _RegistrationFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
-class _RegistrationFieldState extends State<RegistrationField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   bool _isPasswordVisible = false;
 
   void _togglePasswordVisibility() {

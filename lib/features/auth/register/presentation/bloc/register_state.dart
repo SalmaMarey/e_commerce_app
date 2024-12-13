@@ -1,13 +1,13 @@
-abstract class UserState {}
+abstract class RegisterState {}
 
-class UserInitial extends UserState {}
+class RegisterInitial extends RegisterState {}
 
-class UserLoading extends UserState {}
+class RegisterLoading extends RegisterState {}
 
-class UserSuccess extends UserState {}
+class RegisterSuccess extends RegisterState {}
 
-class UserFailure extends UserState {
+class RegisterFailure extends RegisterState {
   final String message;
 
-  UserFailure(this.message);
+  RegisterFailure(this.message);
 }
