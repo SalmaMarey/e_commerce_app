@@ -2,6 +2,7 @@ import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
+import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -55,24 +56,11 @@ class _StartScreenState extends State<StartScreen> {
             SizedBox(height: 106.h),
             Padding(
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
-              child: Container(
-                width: 335.w,
-                height: 61.h,
-                decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(15.r)),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, Routes.register);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
-                  ),
-                  child: Text(
-                    "Let's get started",
-                    style: AppTextStyles.font22Medium,
-                  ),
-                ),
+              child: CustomButton(
+                buttonText: "Let's get started",
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.register);
+                },
               ),
             ),
             SizedBox(
@@ -82,7 +70,7 @@ class _StartScreenState extends State<StartScreen> {
               padding: EdgeInsets.zero,
               child: InkWell(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, Routes.login);
+                  Navigator.pushNamed(context, Routes.login);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
