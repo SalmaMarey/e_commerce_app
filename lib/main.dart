@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/core/routing/app_router.dart';
 import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 
 void main() async {
@@ -19,6 +21,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
 );
 setupServiceLocator();
+ await Hive.initFlutter();
+Hive.registerAdapter(UserModelAdapter());
+await Hive.openBox<UserModel>('userBox');
   runApp(const MyApp());
 }
 
@@ -38,7 +43,7 @@ class MyApp extends StatelessWidget {
           title: AppStrings.appTitle,
           debugShowCheckedModeBanner: false,
           theme: AppThemes.lightTheme,
-          initialRoute: Routes.onBoarding,
+          initialRoute: Routes.start,
         );
       },
     );

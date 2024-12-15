@@ -26,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final phoneController = TextEditingController();
+  final userNameController = TextEditingController();
   File? selectedImage;
 
   @override
@@ -96,6 +97,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         SizedBox(
                           height: 10.h,
+                        ), CustomTextField(
+                          controller: userNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'User name cannot be empty';
+                            }
+                            if (value.length <3) {
+                              return 'Please write a valid name';
+                            }
+                            return null;
+                          },
+                          labelText: 'User name',
+                        ),
+                        SizedBox(
+                          height: 10.h,
                         ),
                         CustomTextField(
                           controller: phoneController,
@@ -131,6 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                          RegisterButton(
                             formKey: formKey,
+                            userNameController: userNameController,
                             emailController: emailController,
                             phoneController: phoneController,
                             passwordController: passwordController,

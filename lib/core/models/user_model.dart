@@ -1,33 +1,53 @@
-class UserModel {
+import 'package:hive/hive.dart';
+
+part 'user_model.g.dart'; // Required for code generation
+
+@HiveType(typeId: 0) // Assign a unique typeId
+class UserModel extends HiveObject {
+  @HiveField(0)
   String id;
-  final String email;
-  final String phoneNumber;
-  final String? password;
-  final String? imageUrl;
+
+  @HiveField(1)
+  String email;
+
+  @HiveField(2)
+  String userName;
+
+  @HiveField(3)
+  String password;
+
+  @HiveField(4)
+  String phoneNumber;
+
+  @HiveField(5)
+  String imageUrl;
 
   UserModel({
     required this.id,
     required this.email,
-    this.password,
+    required this.userName,
+    required this.password,
     required this.phoneNumber,
-    this.imageUrl,
+    required this.imageUrl,
   });
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'email': email,
+        'userName': userName,
+        'password': password,
+        'phoneNumber': phoneNumber,
+        'imageUrl': imageUrl,
+      };
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],
       email: json['email'],
-      password: null, // Never retrieve the password
+      userName: json['userName'],
+      password: json['password'],
       phoneNumber: json['phoneNumber'],
       imageUrl: json['imageUrl'],
     );
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'imageUrl': imageUrl,
-    };
   }
 }

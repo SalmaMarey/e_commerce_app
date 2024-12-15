@@ -4,6 +4,7 @@ import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_even
 import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
@@ -44,5 +45,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginFailure(error: 'An unexpected error occurred: ${e.toString()}'));
       }
     });
+  } void saveUserToHive(UserModel user) {
+    final userBox = Hive.box<UserModel>('userBox');
+    userBox.put('user_id', user);
   }
 }

@@ -9,13 +9,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class RegisterButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController phoneController;
   final TextEditingController passwordController;
+  final TextEditingController userNameController;
   final File? selectedImage;
 
   const RegisterButton({
@@ -25,6 +27,7 @@ class RegisterButton extends StatelessWidget {
     required this.phoneController,
     required this.passwordController,
     required this.selectedImage,
+    required this.userNameController
   });
 
   @override
@@ -37,7 +40,8 @@ class RegisterButton extends StatelessWidget {
             final isEmailUsed = await _checkEmailExists(emailController.text);
             if (isEmailUsed) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Email already registered. Please log in.')),
+                const SnackBar(
+                    content: Text('Email already registered. Please log in.')),
               );
               // Navigator.pushNamed(context, Routes.login);
               return;
@@ -50,12 +54,15 @@ class RegisterButton extends StatelessWidget {
             final user = UserModel(
               id: DateTime.now().toString(),
               email: emailController.text,
+              userName: userNameController.text,
               password: passwordController.text,
               phoneNumber: phoneController.text,
               imageUrl: imageUrl,
             );
             context.read<RegisterBloc>().add(SaveRegisterEvent(user));
-            Navigator.pushNamed(context, Routes.home);
+            final userBox = Hive.box<UserModel>('userBox');
+            userBox.put(user.id, user);
+            Navigator.pushNamed(context, Routes.onBoarding);
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Failed to save user: $e')),
@@ -73,7 +80,7 @@ class RegisterButton extends StatelessWidget {
   Future<bool> _checkEmailExists(String email) async {
     try {
       final snapshot = await FirebaseFirestore.instance
-          .collection('e_users') 
+          .collection('e_users')
           .where('email', isEqualTo: email)
           .get();
 

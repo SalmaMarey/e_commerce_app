@@ -11,7 +11,7 @@ class SkipButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushReplacementNamed(context, Routes.start);
+        Navigator.pushReplacementNamed(context, Routes.layout);
       },
       child: Row(
         children: [
