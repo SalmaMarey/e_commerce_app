@@ -28,7 +28,7 @@ class LoginButton extends StatelessWidget {
               password: passwordController.text,
             ),
           );
-          Navigator.pushReplacementNamed(context, Routes.start);
+          Navigator.pushReplacementNamed(context, Routes.layout);
         }
       },
       buttonText: "Done",
