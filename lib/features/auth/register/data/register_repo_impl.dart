@@ -14,7 +14,7 @@ class RegisterRepositoryImpl implements RegisterRepository {
     UserCredential userCredential =
         await firebaseAuth.createUserWithEmailAndPassword(
       email: user.email,
-      password: user.password!,
+      password: user.password,
     );
 
     user.id = userCredential.user?.uid ?? '';
