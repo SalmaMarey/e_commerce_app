@@ -14,39 +14,46 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     required this.loginUseCase,
     required this.firebaseAuth,
   }) : super(LoginInitial()) {
-    on<LoginButtonPressed>((event, emit) async {
-      emit(LoginLoading());
-      try {
-        UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
-          email: event.email,
-          password: event.password,
-        );
+  on<LoginButtonPressed>((event, emit) async {
+  emit(LoginLoading());
+  try {
+    print('Starting Firebase login...');
+    UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
+      email: event.email,
+      password: event.password,
+    );
 
-        if (userCredential.user != null) {
-          final userModel = UserModel.fromJson({
-            'id': userCredential.user!.uid,
-            'email': userCredential.user!.email,
-            'phoneNumber': userCredential.user!.phoneNumber ?? '',
-            'imageUrl': userCredential.user!.photoURL ?? '',
-          });
-          emit(LoginSuccess(user: userModel));
-        } else {
-          emit(LoginFailure(error: 'User information is null or incomplete.'));
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          emit(LoginFailure(error: 'No user found with this email. Please register first.'));
-        } else if (e.code == 'wrong-password') {
-          emit(LoginFailure(error: 'Incorrect password. Please try again.'));
-        } else {
-          emit(LoginFailure(error: 'Login failed: ${e.message}'));
-        }
-      } catch (e) {
-        emit(LoginFailure(error: 'An unexpected error occurred: ${e.toString()}'));
-      }
-    });
-  } void saveUserToHive(UserModel user) {
-    final userBox = Hive.box<UserModel>('userBox');
-    userBox.put('user_id', user);
+    print('Login response received.');
+    if (userCredential.user != null) {
+      print('Firebase login successful. User UID: ${userCredential.user!.uid}');
+      final userModel = UserModel.fromJson({
+        'id': userCredential.user!.uid,
+        'email': userCredential.user!.email!,
+        'phoneNumber': userCredential.user!.phoneNumber ?? '',
+        'imageUrl': userCredential.user!.photoURL ?? '',
+        'userName': userCredential.user!.displayName ?? '',
+      });
+
+      print('User model created: ${userModel.toJson()}');
+      print('About to save user to Hive...');
+      
+      emit(LoginSuccess(user: userModel));
+      saveUserToHive(userModel);
+    } else {
+      print('Firebase returned null for user credentials.');
+      emit(LoginFailure(error: 'User information is null or incomplete.'));
+    }
+  } catch (e) {
+    print('Login failed with error: ${e.toString()}');
+    emit(LoginFailure(error: 'An unexpected error occurred: ${e.toString()}'));
   }
+});}
+
+void saveUserToHive(UserModel user) {
+  print('Saving user to Hive...');
+  final userBox = Hive.box<UserModel>('userBox');
+  userBox.put('user_id', user);
+  print('User data saved in Hive.');
+  print('User data saved successfully in both Firebase and Hive.');
+}
 }

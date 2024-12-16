@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         body: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
-            if (state is LoginSuccess) {
+            if (state is LoginSuccess) { print('LoginSuccess state received. User: ${state.user.toJson()}');
               Navigator.pushReplacementNamed(context, '/home');
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(

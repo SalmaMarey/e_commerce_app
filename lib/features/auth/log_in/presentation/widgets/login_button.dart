@@ -1,9 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_bloc.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_event.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginButton extends StatelessWidget {
   final TextEditingController emailController;
@@ -20,15 +20,35 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      onPressed: () {
+      onPressed: () async {
         if (formKey.currentState?.validate() ?? false) {
-          BlocProvider.of<LoginBloc>(context).add(
-            LoginButtonPressed(
+          try {
+            UserCredential userCredential =
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: emailController.text,
               password: passwordController.text,
-            ),
+            );
+            if (userCredential.user != null) {
+              Navigator.pushReplacementNamed(context, Routes.layout);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content:
+                        Text('Invalid email or password. Please try again.')),
+              );
+            }
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      'Authentication failed. Please check your credentials and try again.')),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Please fill out all fields correctly')),
           );
-          Navigator.pushReplacementNamed(context, Routes.layout);
         }
       },
       buttonText: "Done",

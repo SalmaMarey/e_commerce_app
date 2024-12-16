@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
-part 'user_model.g.dart'; // Required for code generation
+part 'user_model.g.dart'; 
 
-@HiveType(typeId: 0) // Assign a unique typeId
+@HiveType(typeId: 0) 
 class UserModel extends HiveObject {
   @HiveField(0)
   String id;

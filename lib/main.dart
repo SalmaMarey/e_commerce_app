@@ -5,6 +5,7 @@ import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_themes.dart';
 import 'package:e_commerce_app/core/utils/strings.dart';
 import 'package:e_commerce_app/firebase_options.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,10 +21,17 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
+await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+  );
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  await Hive.openBox<UserModel>('userBox');
 setupServiceLocator();
- await Hive.initFlutter();
-Hive.registerAdapter(UserModelAdapter());
-await Hive.openBox<UserModel>('userBox');
+//  await Hive.initFlutter();
+// Hive.registerAdapter(UserModelAdapter());
+// await Hive.openBox<UserModel>('userBox');
   runApp(const MyApp());
 }
 
