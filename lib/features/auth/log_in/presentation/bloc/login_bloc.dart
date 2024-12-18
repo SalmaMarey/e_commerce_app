@@ -1,52 +1,61 @@
+// ignore_for_file: avoid_print
+
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/usecases/login_use_case.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_event.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
-  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
   LoginBloc({
     required this.loginUseCase,
-    required this.firebaseAuth,
+    required this.firestore,
   }) : super(LoginInitial()) {
     on<LoginButtonPressed>((event, emit) async {
       emit(LoginLoading());
       try {
-        UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
-
         if (userCredential.user != null) {
-          final userModel = UserModel.fromJson({
-            'id': userCredential.user!.uid,
-            'email': userCredential.user!.email,
-            'phoneNumber': userCredential.user!.phoneNumber ?? '',
-            'imageUrl': userCredential.user!.photoURL ?? '',
-          });
-          emit(LoginSuccess(user: userModel));
+          DocumentSnapshot<Map<String, dynamic>> userDoc = await firestore
+              .collection('e_users')
+              .doc(userCredential.user!.uid)
+              .get();
+          if (userDoc.exists) {
+            final userModel = UserModel.fromJson(userDoc.data()!);
+
+            emit(LoginSuccess(user: userModel));
+
+            // Save user to Hive
+            saveUserToHive(userModel);
+          } else {
+            emit(LoginFailure(
+                error: 'User information is not available in Firestore.'));
+          }
         } else {
-          emit(LoginFailure(error: 'User information is null or incomplete.'));
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          emit(LoginFailure(error: 'No user found with this email. Please register first.'));
-        } else if (e.code == 'wrong-password') {
-          emit(LoginFailure(error: 'Incorrect password. Please try again.'));
-        } else {
-          emit(LoginFailure(error: 'Login failed: ${e.message}'));
+          emit(LoginFailure(error: 'User credentials are null or incomplete.'));
         }
       } catch (e) {
-        emit(LoginFailure(error: 'An unexpected error occurred: ${e.toString()}'));
+        emit(LoginFailure(
+            error: 'An unexpected error occurred: ${e.toString()}'));
       }
     });
-  } void saveUserToHive(UserModel user) {
+  }
+
+  void saveUserToHive(UserModel user) {
+    print('Saving user to Hive...');
     final userBox = Hive.box<UserModel>('userBox');
-    userBox.put('user_id', user);
+    userBox.put(user.id, user);
+    print('User data saved successfully in both Firebase and Hive.');
   }
 }
