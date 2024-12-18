@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'package:e_commerce_app/features/splash_onboarding/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -39,46 +40,44 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _logout() async {
+    try {
+      await userBox.clear();
+      print('User logged out and data cleared from Hive.');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const StartScreen()),
+      );
+    } catch (e) {
+      print('Error during logout: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Home',
+          style: TextStyle(color: AppColors.primaryColor),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: AppColors.primaryColor),
+            onPressed: _logout,
+          ),
+        ],
+        backgroundColor: AppColors.textForm,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(top: 58.h, left: 23.w, right: 21.w),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: 25.r,
-                      backgroundColor: AppColors.textForm,
-                      child: const Icon(
-                        Icons.list,
-                        size: 30,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: 25.r,
-                      backgroundColor: AppColors.textForm,
-                      child: const Icon(
-                        Icons.search,
-                        size: 30,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h), 
+              SizedBox(height: 20.h),
               username == null
-                  ? const CircularProgressIndicator() 
+                  ? const CircularProgressIndicator()
                   : Text(
                       'Hello, ${username ?? 'Guest'}!',
                       style: TextStyle(
