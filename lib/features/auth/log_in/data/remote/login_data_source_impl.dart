@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
-import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data-source.dart';
+import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginDataSourceImpl implements LoginDataSource {

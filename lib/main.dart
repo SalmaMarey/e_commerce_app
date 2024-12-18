@@ -12,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -20,21 +19,18 @@ void main() async {
   ));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
-await FirebaseAppCheck.instance.activate(
+  );
+  await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
 
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox<UserModel>('userBox');
-setupServiceLocator();
-//  await Hive.initFlutter();
-// Hive.registerAdapter(UserModelAdapter());
-// await Hive.openBox<UserModel>('userBox');
+  setupServiceLocator();
+
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
