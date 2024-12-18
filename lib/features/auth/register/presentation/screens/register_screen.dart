@@ -4,15 +4,15 @@ import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
+import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_bloc.dart';
+import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_event.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_state.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/widgets/register_button.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -33,10 +33,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => di<RegisterBloc>(),
-      child: BlocConsumer<RegisterBloc, RegisterState>(listener: (context, state) {
+      child:
+          BlocConsumer<RegisterBloc, RegisterState>(listener: (context, state) {
         if (state is RegisterSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Registration Successful!')));
+          Navigator.pushReplacementNamed(context, Routes.onBoarding);
         } else if (state is RegisterFailure) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.message)));
@@ -72,12 +74,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 54.h,
                         ),
                         ImagePickerWidget(
-                            onImagePicked: (image) {
-                              setState(() {
-                                selectedImage = image;
-                              });
-                            },
-                          ),
+                          onImagePicked: (image) {
+                            setState(() {
+                              selectedImage = image;
+                            });
+                          },
+                        ),
                         SizedBox(
                           height: 54.h,
                         ),
@@ -97,13 +99,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         SizedBox(
                           height: 10.h,
-                        ), CustomTextField(
+                        ),
+                        CustomTextField(
                           controller: userNameController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'User name cannot be empty';
                             }
-                            if (value.length <3) {
+                            if (value.length < 3) {
                               return 'Please write a valid name';
                             }
                             return null;
@@ -145,14 +148,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 77.h,
                         ),
-                         RegisterButton(
-                            formKey: formKey,
-                            userNameController: userNameController,
-                            emailController: emailController,
-                            phoneController: phoneController,
-                            passwordController: passwordController,
-                            selectedImage: selectedImage,
-                          ),
+                        CustomButton(
+                          buttonText: 'Done',
+                          onPressed: () {
+                            if (formKey.currentState?.validate() ?? false) {
+                              context.read<RegisterBloc>().add(
+                                    RegisterUserEvent(
+                                      email: emailController.text,
+                                      userName: userNameController.text,
+                                      password: passwordController.text,
+                                      phoneNumber: phoneController.text,
+                                      selectedImage: selectedImage,
+                                    ),
+                                  );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Please fill all fields correctly')),
+                              );
+                            }
+                          },
+                        ),
                         SizedBox(
                           height: 24.h,
                         ),

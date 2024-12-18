@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/features/auth/log_in/data/login_repo_impl.dart';
-import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data-source.dart';
+import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source_impl.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/login_repo.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/usecases/login_use_case.dart';
@@ -42,9 +42,12 @@ void setupServiceLocator(){
   di.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(loginDataSource: di()),
   );
-  di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
-  di.registerFactory(() => LoginBloc(loginUseCase: di(), firebaseAuth: di()));
-
+  
+di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
+ di.registerFactory(() => LoginBloc(
+    loginUseCase: di(),
+    firestore: di(), 
+  ));
 
 
 

@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_print
+
+import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
+import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_bloc.dart';
+import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_event.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_state.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/widgets/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,8 +41,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         body: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
-            if (state is LoginSuccess) { print('LoginSuccess state received. User: ${state.user.toJson()}');
-              Navigator.pushReplacementNamed(context, '/home');
+            if (state is LoginSuccess) {
+              print(
+                  'LoginSuccess state received. User: ${state.user.toJson()}');
+              Navigator.pushReplacementNamed(context, Routes.layout);
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),
@@ -61,56 +67,85 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Form(
                         key: formKey,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Login',
-                              style: AppTextStyles.font52Bold,
-                            ),
-                            Text(
-                              'Good to see you back! 🖤',
-                              style: AppTextStyles.font19Regular,
-                            ),
-                            SizedBox(
-                              height: 17.08.h,
-                            ),
-                            CustomTextField(
-                              controller: emailController,
-                              validator: (value) {
-                                if (value == null || !_validateEmail(value)) {
-                                  return 'Please enter a valid email';
-                                }
-                                return null;
-                              },
-                              labelText: 'Email',
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            CustomTextField(
-                              controller: passwordController,
-                              validator: (value) {
-                                if (value == null ||
-                                    !_validatePassword(value)) {
-                                  return 'Password must be at least 6 characters';
-                                }
-                                return null;
-                              },
-                              labelText: 'Password',
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            SizedBox(
-                              height: 57.h,
-                            ),
-                            LoginButton(
-                              emailController: emailController,
-                              passwordController: passwordController,
-                              formKey: formKey,
-                            ),
-                          ],
-                        ),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Login',
+                                style: AppTextStyles.font52Bold,
+                              ),
+                              Text(
+                                'Good to see you back! 🖤',
+                                style: AppTextStyles.font19Regular,
+                              ),
+                              SizedBox(
+                                height: 17.08.h,
+                              ),
+                              CustomTextField(
+                                controller: emailController,
+                                validator: (value) {
+                                  if (value == null || !_validateEmail(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                                labelText: 'Email',
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              CustomTextField(
+                                controller: passwordController,
+                                validator: (value) {
+                                  if (value == null ||
+                                      !_validatePassword(value)) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                                labelText: 'Password',
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              SizedBox(
+                                height: 57.h,
+                              ),
+                              CustomButton(
+                                onPressed: () {
+                                  if (formKey.currentState?.validate() ??
+                                      false) {
+                                    final email = emailController.text.trim();
+                                    final password =
+                                        passwordController.text.trim();
+                                    if (email.isNotEmpty &&
+                                        password.isNotEmpty) {
+                                      BlocProvider.of<LoginBloc>(context).add(
+                                        LoginButtonPressed(
+                                          email: email,
+                                          password: password,
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'Email and password cannot be empty'),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Please fill out all fields correctly'),
+                                      ),
+                                    );
+                                  }
+                                },
+                                buttonText: 'Done',
+                              ),
+                            ]),
                       ),
                     ),
                   ],

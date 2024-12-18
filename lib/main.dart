@@ -1,8 +1,8 @@
-import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/core/routing/app_router.dart';
 import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_themes.dart';
+import 'package:e_commerce_app/core/utils/hive_keys.dart';
 import 'package:e_commerce_app/core/utils/strings.dart';
 import 'package:e_commerce_app/firebase_options.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -10,7 +10,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 
 void main() async {
@@ -24,14 +23,11 @@ void main() async {
 await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
-
-  await Hive.initFlutter();
-  Hive.registerAdapter(UserModelAdapter());
-  await Hive.openBox<UserModel>('userBox');
+  await HiveKeys.initializeHive();
+  // await Hive.initFlutter();
+  // Hive.registerAdapter(UserModelAdapter());
+  // await Hive.openBox<UserModel>('userBox');
 setupServiceLocator();
-//  await Hive.initFlutter();
-// Hive.registerAdapter(UserModelAdapter());
-// await Hive.openBox<UserModel>('userBox');
   runApp(const MyApp());
 }
 
