@@ -8,33 +8,41 @@ import 'package:e_commerce_app/features/auth/register/data/remote/register_data_
 import 'package:e_commerce_app/features/auth/register/domain/usecases/register_use_case.dart';
 import 'package:e_commerce_app/features/auth/register/domain/register_repo.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_bloc.dart';
+import 'package:e_commerce_app/features/profile/data/local/profile_local_data_source.dart';
+import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dart';
+import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source.dart';
+import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source_impl.dart';
+import 'package:e_commerce_app/features/profile/domain/profile_repository.dart';
+import 'package:e_commerce_app/features/profile/domain/use_cases/change_password_use_case.dart';
+import 'package:e_commerce_app/features/profile/domain/use_cases/fetch_profile.dart';
+import 'package:e_commerce_app/features/profile/domain/use_cases/update_profile.dart';
+import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/features/auth/register/data/remote/register_data_source_impl.dart';
 import 'package:e_commerce_app/features/auth/register/data/register_repo_impl.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 
 final di = GetIt.instance;
 
-void setupServiceLocator(){
+void setupServiceLocator() {
+  // Hive
+  di.registerLazySingleton(() => Hive);
+  // Firebase services
+  di.registerLazySingleton(() => FirebaseFirestore.instance);
+  di.registerLazySingleton(() => FirebaseAuth.instance);
 
-   // Firebase services
-   di.registerLazySingleton(() => FirebaseFirestore.instance); 
-   di.registerLazySingleton(() => FirebaseAuth.instance);
-
-
- //register
-   di.registerLazySingleton<RegisterDataSource>(
+  //register
+  di.registerLazySingleton<RegisterDataSource>(
       () => RegisterDataSourceImpl(di<FirebaseFirestore>()));
-  di.registerLazySingleton<RegisterRepository>(
-      () => RegisterRepositoryImpl(di<RegisterDataSource>(), di<FirebaseAuth>()));
+  di.registerLazySingleton<RegisterRepository>(() =>
+      RegisterRepositoryImpl(di<RegisterDataSource>(), di<FirebaseAuth>()));
   di.registerLazySingleton(() => RegisterUseCase(di<RegisterRepository>()));
   di.registerFactory(() => RegisterBloc(di<RegisterUseCase>()));
 
-
   //login
-   di.registerLazySingleton<LoginDataSource>(
+  di.registerLazySingleton<LoginDataSource>(
     () => LoginDataSourceImpl(
       firebaseAuth: di(),
       firestore: di(),
@@ -43,14 +51,39 @@ void setupServiceLocator(){
   di.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(loginDataSource: di()),
   );
-di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
- di.registerFactory(() => LoginBloc(
-    loginUseCase: di(),
-    firestore: di(),
-  ));
+  di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
+  di.registerFactory(() => LoginBloc(
+        loginUseCase: di(),
+        firestore: di(),
+      ));
+  //profile
+     di.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(di(), di()),
+  );
 
+  // Local Data Source
+  di.registerLazySingleton<ProfileLocalDataSource>(
+    () => ProfileLocalDataSource(),
+  );
 
+  // Repository
+  di.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(di.get<ProfileRemoteDataSource>(), di.get<ProfileLocalDataSource>()),
+  );
 
+  // Use Cases
+  di.registerLazySingleton<FetchProfileUseCase>(
+    () => FetchProfileUseCase(di.get<ProfileRepository>()),
+  );
 
+  di.registerLazySingleton<UpdateProfileUseCase>(
+    () => UpdateProfileUseCase(di.get<ProfileRepository>()),
+  );
+
+  // BLoC
+  di.registerLazySingleton(() => ChangePasswordUseCase(di()));
+
+  // BLoC
+  di.registerFactory(() => ProfileBloc(di(), di(), di()));
 
 }

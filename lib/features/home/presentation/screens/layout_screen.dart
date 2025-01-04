@@ -1,9 +1,13 @@
+import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/features/cart/presentation/cart_screen.dart';
 import 'package:e_commerce_app/features/favorite/presentation/favorite_screen.dart';
 import 'package:e_commerce_app/features/home/presentation/screens/home_screen.dart';
-import 'package:e_commerce_app/features/profile/presentation/profile_screen.dart';
+import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:e_commerce_app/features/profile/presentation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});
@@ -14,13 +18,28 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   int _selectedIndex = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const FavoriteScreen(),
-    const CartScreen(),
-    const ProfileScreen(),
-  ];
+  List<Widget> get _pages {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return [
+        const HomeScreen(),
+        const FavoriteScreen(),
+        const CartScreen(),
+        const Center(child: Text('Please log in to view profile')),
+      ];
+    }
+    return [
+      const HomeScreen(),
+      const FavoriteScreen(),
+      const CartScreen(),
+      BlocProvider( 
+        create: (context) => di<ProfileBloc>(),
+        child: ProfileScreen(uid: user.uid),
+      ),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,27 +63,19 @@ class _LayoutScreenState extends State<LayoutScreen> {
         unselectedIconTheme: const IconThemeData(size: 25),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
+            icon: Icon(Icons.home_outlined),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite_outline,
-            ),
+            icon: Icon(Icons.favorite_outline),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart_outlined,
-            ),
+            icon: Icon(Icons.shopping_cart_outlined),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-            ),
+            icon: Icon(Icons.account_circle_outlined),
             label: '',
           ),
         ],

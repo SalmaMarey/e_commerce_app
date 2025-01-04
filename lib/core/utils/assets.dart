@@ -42,4 +42,5 @@ class Assets {
   static const String login = "assets/images/login.png";
   static const String register = "assets/images/register.jpg";
   static const String uploadPhoto = "assets/images/Upload_Photo.png";
+  static const String profilePhoto = "assets/images/profile.png";
 }
