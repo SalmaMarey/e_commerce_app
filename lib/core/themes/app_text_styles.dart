@@ -67,13 +67,16 @@ class AppTextStyles {
   static TextStyle get font14Regular => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
+        color: AppColors.primaryColor,
       );
   static TextStyle get font14Bold => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.bold,
+        color: AppColors.primaryColor,
       );
   static TextStyle get font16Bold => TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
+        color: AppColors.scaffoldBackgroundLightColor,
       );
 }

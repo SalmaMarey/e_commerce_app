@@ -56,20 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Home',
-          style: TextStyle(color: AppColors.primaryColor),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: AppColors.primaryColor),
-            onPressed: _logout,
-          ),
-        ],
-        backgroundColor: AppColors.textForm,
-        elevation: 0,
-      ),
+     
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(top: 58.h, left: 23.w, right: 21.w),
@@ -85,7 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryColor,
                       ),
-                    ),
+                    ),  IconButton(
+            icon: const Icon(Icons.logout, color: AppColors.primaryColor),
+            onPressed: _logout,
+          ),
             ],
           ),
         ),

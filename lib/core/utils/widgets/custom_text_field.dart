@@ -6,16 +6,20 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
+  final bool enabled; // Add this parameter
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.labelText,
     this.validator,
+    this.enabled = true, // Default to true
   });
+
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
+
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _isPasswordVisible = false;
 
@@ -24,12 +28,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       _isPasswordVisible = !_isPasswordVisible;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
       validator: widget.validator,
       obscureText: widget.labelText == 'Password' ? !_isPasswordVisible : false,
+      enabled: widget.enabled, // Use the enabled parameter
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.textForm,
