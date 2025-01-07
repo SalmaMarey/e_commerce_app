@@ -6,13 +6,13 @@ import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_text_field.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_bloc.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_state.dart';
+import 'package:e_commerce_app/features/auth/log_in/presentation/controller/login_bloc.dart';
+import 'package:e_commerce_app/features/auth/log_in/presentation/controller/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../bloc/login_event.dart';
+import '../controller/login_event.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
