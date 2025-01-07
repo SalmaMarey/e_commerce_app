@@ -2,8 +2,8 @@
 
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/register/domain/usecases/register_use_case.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_event.dart';
-import 'package:e_commerce_app/features/auth/register/presentation/bloc/register_state.dart';
+import 'package:e_commerce_app/features/auth/register/presentation/controller/register_event.dart';
+import 'package:e_commerce_app/features/auth/register/presentation/controller/register_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 

@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_bloc.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_event.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_state.dart';
 import 'package:e_commerce_app/features/profile/presentation/widgets/profile_form.dart';
 import 'package:e_commerce_app/features/profile/presentation/widgets/profile_header.dart';
 import 'package:firebase_storage/firebase_storage.dart';

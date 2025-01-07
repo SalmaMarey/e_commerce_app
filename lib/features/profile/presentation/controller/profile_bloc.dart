@@ -1,8 +1,8 @@
 import 'package:e_commerce_app/features/profile/domain/use_cases/change_password_use_case.dart';
 import 'package:e_commerce_app/features/profile/domain/use_cases/fetch_profile.dart';
 import 'package:e_commerce_app/features/profile/domain/use_cases/update_profile.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_event.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {

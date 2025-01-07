@@ -1,9 +1,9 @@
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:e_commerce_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_bloc.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_event.dart';
+import 'package:e_commerce_app/features/profile/presentation/controller/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

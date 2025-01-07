@@ -2,8 +2,8 @@
 
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/usecases/login_use_case.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_event.dart';
-import 'package:e_commerce_app/features/auth/log_in/presentation/bloc/login_state.dart';
+import 'package:e_commerce_app/features/auth/log_in/presentation/controller/login_event.dart';
+import 'package:e_commerce_app/features/auth/log_in/presentation/controller/login_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
