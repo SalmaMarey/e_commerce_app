@@ -43,4 +43,10 @@ class Assets {
   static const String register = "assets/images/register.jpg";
   static const String uploadPhoto = "assets/images/Upload_Photo.png";
   static const String profilePhoto = "assets/images/profile.png";
+  static const String booksIcon = "assets/icons/books_icon.png";
+  static const String elecIcon = "assets/icons/elec_icon.png";
+  static const String clothingIcon = "assets/icons/clothing_icon.png";
+  static const String homeIcon = "assets/icons/home_icon.png";
+  static const String errorImage = "assets/images/error_image.png";
+  static const String bagsImage = "assets/images/bags.png";
 }

@@ -56,9 +56,9 @@ class AppTextStyles {
         fontWeight: FontWeight.w400,
       );
   static TextStyle get font20Bold => TextStyle(
-        fontSize: 20.sp,
-        fontWeight: FontWeight.bold,
-      );
+      fontSize: 20.sp,
+      fontWeight: FontWeight.bold,
+      color: AppColors.primaryColor);
   static TextStyle get font19Regular => TextStyle(
         fontSize: 19.sp,
         fontWeight: FontWeight.w400,
@@ -78,5 +78,10 @@ class AppTextStyles {
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.scaffoldBackgroundLightColor,
+      );
+  static TextStyle get font16BoldGrey => TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.grey0,
       );
 }

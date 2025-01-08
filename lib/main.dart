@@ -4,6 +4,7 @@ import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_themes.dart';
 import 'package:e_commerce_app/core/utils/strings.dart';
+import 'package:e_commerce_app/features/home/presentation/widgets/offers_widget.dart';
 import 'package:e_commerce_app/firebase_options.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppThemes.lightTheme,
           initialRoute: Routes.layout
-          ,
+          
+          
         );
       },
     );

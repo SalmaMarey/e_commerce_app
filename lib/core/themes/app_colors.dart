@@ -10,5 +10,7 @@ class AppColors {
   static const Color textForm = Color.fromARGB(255, 228, 227, 227);
   static const Color inActiveDots = Color(0xFFD9D9D9);
   // static const Color logoutColor = Color(0xFFFF0000);
-  //  static const Color grey0 = Color(0xFFDEDEDE);
+  static const Color grey0 = Color.fromARGB(255, 174, 173, 173);
+  static const Color orangeContainer = Color(0xffF17547);
+  static const Color greenContainer = Color(0xff50D63B);
 }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/login_repo_impl.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source_impl.dart';
@@ -8,6 +9,12 @@ import 'package:e_commerce_app/features/auth/register/data/remote/register_data_
 import 'package:e_commerce_app/features/auth/register/domain/usecases/register_use_case.dart';
 import 'package:e_commerce_app/features/auth/register/domain/register_repo.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/controller/register_bloc.dart';
+import 'package:e_commerce_app/features/home/data/home_repo_impl.dart';
+import 'package:e_commerce_app/features/home/data/remote/home_data_source.dart';
+import 'package:e_commerce_app/features/home/data/remote/home_data_source_impl.dart';
+import 'package:e_commerce_app/features/home/domain/home_repo.dart';
+import 'package:e_commerce_app/features/home/domain/usecases/categories_usecase.dart';
+import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/profile/data/local/profile_local_data_source.dart';
 import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dart';
 import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source.dart';
@@ -85,5 +92,21 @@ void setupServiceLocator() {
 
   // BLoC
   di.registerFactory(() => ProfileBloc(di(), di(), di()));
+
+  //home
+   // BLoC
+  di.registerFactory(() => HomeBloc());
+
+  // UseCase
+  di.registerLazySingleton(() => GetCategoriesUseCase(di()));
+
+  // Repository
+  di.registerLazySingleton<HomeRepository>(() =>HomeRepositoryImpl(di()));
+
+  // DataSource
+  di.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(di()));
+
+  // External
+  di.registerLazySingleton(() => Dio());
 
 }
