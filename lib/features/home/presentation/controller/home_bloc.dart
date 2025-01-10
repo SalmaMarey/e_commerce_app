@@ -33,7 +33,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         final products =
             await getProductsByCategoryUseCase.call(event.category);
-        emit(HomeLoaded(currentState.categories, products: products));
+        emit(HomeLoaded(
+          currentState.categories,
+          products: products,
+          selectedCategory: event.category,
+        ));
       } catch (e) {
         emit(HomeError('Failed to fetch products: $e'));
       }

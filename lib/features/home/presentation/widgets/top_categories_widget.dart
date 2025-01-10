@@ -6,9 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TopCategoriesWidget extends StatelessWidget {
   final List<String> categories;
   final Map<String, String> categoryImages;
+  final String? selectedCategory; // Add this property
 
-  const TopCategoriesWidget(
-      {super.key, required this.categories, required this.categoryImages});
+  const TopCategoriesWidget({
+    super.key,
+    required this.categories,
+    required this.categoryImages,
+    this.selectedCategory, // Initialize with null
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,26 +27,36 @@ class TopCategoriesWidget extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final category = categories[index];
-          final imagePath =
-              categoryImages[category] ?? "assets/images/error_image.png";
+          final imagePath = categoryImages[category] ?? "assets/images/error_image.png";
+          final isSelected = category == selectedCategory; // Check if the category is selected
 
           return InkWell(
             onTap: () {
-              context
-                  .read<HomeBloc>()
-                  .add(FetchProductsByCategoryEvent(category));
+              context.read<HomeBloc>().add(FetchProductsByCategoryEvent(category));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  imagePath,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isSelected ? Colors.blue : Colors.transparent, // Highlight if selected
+                  ),
+                  padding: const EdgeInsets.all(8), // Add padding for the circle
+                  child: Image.asset(
+                    imagePath,
+                    width: 40, // Adjust size to fit inside the circle
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                Text(category),
+                Text(
+                  category,
+                  style: TextStyle(
+                    color: isSelected ? Colors.blue : Colors.black, // Highlight text if selected
+                  ),
+                ),
               ],
             ),
           );

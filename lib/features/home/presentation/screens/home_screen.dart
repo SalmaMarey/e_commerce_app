@@ -106,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 TopCategoriesWidget(
                   categories: state.categories,
                   categoryImages: categoryImages,
+                  selectedCategory: state.selectedCategory,
                 ),
                 if (state.products.isNotEmpty)
                   SliverToBoxAdapter(
