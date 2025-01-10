@@ -32,3 +32,5 @@ class HomeError extends HomeState {
 
   HomeError(this.message);
 }
+
+class ProductsLoading extends HomeState {}

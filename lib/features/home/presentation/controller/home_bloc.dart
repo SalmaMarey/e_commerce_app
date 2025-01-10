@@ -29,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       FetchProductsByCategoryEvent event, Emitter<HomeState> emit) async {
     if (state is HomeLoaded) {
       final currentState = state as HomeLoaded;
-      emit(HomeLoading());
+      emit(ProductsLoading());
       try {
         final products =
             await getProductsByCategoryUseCase.call(event.category);
