@@ -1,30 +1,42 @@
+import 'package:e_commerce_app/features/home/domain/usecases/categories_usecase.dart';
+import 'package:e_commerce_app/features/home/domain/usecases/get_product_by_category_use_case.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeInitial()) {
+  final GetCategoriesUseCase getCategoriesUseCase;
+  final GetProductsByCategoryUseCase getProductsByCategoryUseCase;
+
+  HomeBloc(this.getCategoriesUseCase, this.getProductsByCategoryUseCase)
+      : super(HomeInitial()) {
     on<FetchCategoriesEvent>(_onFetchCategories);
-    on<SelectCategoryEvent>(_onSelectCategory);
+    on<FetchProductsByCategoryEvent>(_onFetchProductsByCategory);
   }
 
   void _onFetchCategories(
       FetchCategoriesEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoading());
     try {
-      final List<String> categories = await _fetchCategories();
+      final categories = await getCategoriesUseCase.call();
       emit(HomeLoaded(categories));
     } catch (e) {
       emit(HomeError('Failed to fetch categories: $e'));
     }
   }
 
-  void _onSelectCategory(SelectCategoryEvent event, Emitter<HomeState> emit) {
-    emit(CategorySelected(event.category));
-  }
-
-  Future<List<String>> _fetchCategories() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return ['Electronics', 'Clothing', 'Home', 'Books'];
+  void _onFetchProductsByCategory(
+      FetchProductsByCategoryEvent event, Emitter<HomeState> emit) async {
+    if (state is HomeLoaded) {
+      final currentState = state as HomeLoaded;
+      emit(HomeLoading());
+      try {
+        final products =
+            await getProductsByCategoryUseCase.call(event.category);
+        emit(HomeLoaded(currentState.categories, products: products));
+      } catch (e) {
+        emit(HomeError('Failed to fetch products: $e'));
+      }
+    }
   }
 }

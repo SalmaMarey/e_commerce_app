@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
+import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_state.dart';
+import 'package:e_commerce_app/features/home/presentation/widgets/products_list_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/top_categories_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/header_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/offers_widget.dart';
@@ -62,14 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> categoryImages = {
-      'Electronics': 'assets/icons/elec_icon.png',
-      'Clothing': 'assets/icons/clothing_icon.png',
-      'Home': 'assets/icons/home_icon.png',
-      'Books': 'assets/icons/books_icon.png',
+      'electronics': 'assets/icons/elec_icon.png',
+      'jewelery': 'assets/icons/clothing_icon.png',
+      "men's clothing": 'assets/icons/home_icon.png',
+      "women's clothing": 'assets/icons/books_icon.png',
     };
 
     return BlocProvider(
-      create: (context) => HomeBloc()..add(FetchCategoriesEvent()),
+      create: (context) => di<HomeBloc>()..add(FetchCategoriesEvent()),
       child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading) {
@@ -105,11 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   categories: state.categories,
                   categoryImages: categoryImages,
                 ),
+                if (state.products.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20.h, left: 20.w),
+                      child: Text(
+                        'Products',
+                        style: AppTextStyles.font20Bold,
+                      ),
+                    ),
+                  ),
+                if (state.products.isNotEmpty)
+                  ProductsListWidget(products: state.products),
               ],
-            );
-          } else if (state is CategorySelected) {
-            return Center(
-              child: Text('Selected Category: ${state.selectedCategory}'),
             );
           } else if (state is HomeError) {
             return Center(child: Text(state.message));

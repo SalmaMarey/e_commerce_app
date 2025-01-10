@@ -43,14 +43,11 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return MaterialApp(
-          onGenerateRoute: AppRouter.onGenerateRoute,
-          title: AppStrings.appTitle,
-          debugShowCheckedModeBanner: false,
-          theme: AppThemes.lightTheme,
-          initialRoute: Routes.layout
-          
-          
-        );
+            onGenerateRoute: AppRouter.onGenerateRoute,
+            title: AppStrings.appTitle,
+            debugShowCheckedModeBanner: false,
+            theme: AppThemes.lightTheme,
+            initialRoute: Routes.layout);
       },
     );
   }

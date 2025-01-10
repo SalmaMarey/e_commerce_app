@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/features/home/data/remote/home_data_source.dart';
 
 class HomeDataSourceImpl implements HomeDataSource {
@@ -9,7 +10,7 @@ class HomeDataSourceImpl implements HomeDataSource {
   Future<List<String>> getCategories() async {
     try {
       final response =
-          await dio.get('https://dummyjson.com/products/categories');
+          await dio.get('https://fakestoreapi.com/products/categories');
       if (response.statusCode == 200) {
         return List<String>.from(response.data);
       } else {
@@ -17,6 +18,23 @@ class HomeDataSourceImpl implements HomeDataSource {
       }
     } catch (e) {
       throw Exception('Failed to load categories: $e');
+    }
+  }
+
+  @override
+  Future<List<Product>> getProductsByCategory(String category) async {
+    try {
+      final response =
+          await dio.get('https://fakestoreapi.com/products/category/$category');
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((json) => Product.fromJson(json))
+            .toList();
+      } else {
+        throw Exception('Failed to load products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load products: $e');
     }
   }
 }

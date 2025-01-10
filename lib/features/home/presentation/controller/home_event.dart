@@ -7,3 +7,9 @@ class SelectCategoryEvent extends HomeEvent {
 
   SelectCategoryEvent(this.category);
 }
+
+class FetchProductsByCategoryEvent extends HomeEvent {
+  final String category;
+
+  FetchProductsByCategoryEvent(this.category);
+}

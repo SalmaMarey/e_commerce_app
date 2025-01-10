@@ -1,3 +1,5 @@
+import 'package:e_commerce_app/core/models/product_model.dart';
+
 abstract class HomeState {}
 
 class HomeInitial extends HomeState {}
@@ -6,14 +8,20 @@ class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
   final List<String> categories;
-
- HomeLoaded(this.categories);
+  final List<Product> products;
+  HomeLoaded(this.categories, {this.products = const []});
 }
 
 class CategorySelected extends HomeState {
   final String selectedCategory;
 
   CategorySelected(this.selectedCategory);
+}
+
+class ProductsLoaded extends HomeState {
+  final List<Product> products;
+
+  ProductsLoaded(this.products);
 }
 
 class HomeError extends HomeState {
