@@ -20,6 +20,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final categories = await getCategoriesUseCase.call();
       emit(HomeLoaded(categories));
+
+      if (categories.isNotEmpty) {
+        add(FetchProductsByCategoryEvent(categories.first));
+      }
     } catch (e) {
       emit(HomeError('Failed to fetch categories: $e'));
     }

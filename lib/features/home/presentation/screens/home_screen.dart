@@ -15,9 +15,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 
+
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -118,15 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       categoryImages: categoryImages,
                       selectedCategory: selectedCategory,
                     ),
-                    // SliverToBoxAdapter(
-                    //   child: Padding(
-                    //     padding: EdgeInsets.only(top: 20.h, left: 20.w),
-                    //     child: Text(
-                    //       'Products',
-                    //       style: AppTextStyles.font20Bold,
-                    //     ),
-                    //   ),
-                    // ),
                     if (state is ProductsLoading)
                       const SliverToBoxAdapter(
                         child: Center(
