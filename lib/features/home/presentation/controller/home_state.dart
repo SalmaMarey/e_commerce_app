@@ -33,4 +33,9 @@ class HomeError extends HomeState {
   HomeError(this.message);
 }
 
-class ProductsLoading extends HomeState {}
+class ProductsLoading extends HomeState {
+  final List<String> categories;
+  final String? selectedCategory;
+
+  ProductsLoading(this.categories, this.selectedCategory);
+}

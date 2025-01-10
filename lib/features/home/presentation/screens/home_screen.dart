@@ -80,6 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is HomeLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is HomeLoaded || state is ProductsLoading) {
+                final categories = (state is HomeLoaded)
+                    ? state.categories
+                    : (state as ProductsLoading).categories;
+                final selectedCategory = (state is HomeLoaded)
+                    ? state.selectedCategory
+                    : (state as ProductsLoading).selectedCategory;
+
                 return CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
@@ -107,20 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     TopCategoriesWidget(
-                      categories: (state is HomeLoaded) ? state.categories : [],
+                      categories: categories,
                       categoryImages: categoryImages,
-                      selectedCategory:
-                          (state is HomeLoaded) ? state.selectedCategory : null,
+                      selectedCategory: selectedCategory,
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 20.h, left: 20.w),
-                        child: Text(
-                          'Products',
-                          style: AppTextStyles.font20Bold,
-                        ),
-                      ),
-                    ),
+                    // SliverToBoxAdapter(
+                    //   child: Padding(
+                    //     padding: EdgeInsets.only(top: 20.h, left: 20.w),
+                    //     child: Text(
+                    //       'Products',
+                    //       style: AppTextStyles.font20Bold,
+                    //     ),
+                    //   ),
+                    // ),
                     if (state is ProductsLoading)
                       const SliverToBoxAdapter(
                         child: Center(
