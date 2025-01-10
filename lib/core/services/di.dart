@@ -14,6 +14,7 @@ import 'package:e_commerce_app/features/home/data/remote/home_data_source.dart';
 import 'package:e_commerce_app/features/home/data/remote/home_data_source_impl.dart';
 import 'package:e_commerce_app/features/home/domain/home_repo.dart';
 import 'package:e_commerce_app/features/home/domain/usecases/categories_usecase.dart';
+import 'package:e_commerce_app/features/home/domain/usecases/get_product_by_category_use_case.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/profile/data/local/profile_local_data_source.dart';
 import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dart';
@@ -64,7 +65,7 @@ void setupServiceLocator() {
         firestore: di(),
       ));
   //profile
-     di.registerLazySingleton<ProfileRemoteDataSource>(
+  di.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(di(), di()),
   );
 
@@ -75,7 +76,8 @@ void setupServiceLocator() {
 
   // Repository
   di.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(di.get<ProfileRemoteDataSource>(), di.get<ProfileLocalDataSource>()),
+    () => ProfileRepositoryImpl(
+        di.get<ProfileRemoteDataSource>(), di.get<ProfileLocalDataSource>()),
   );
 
   // Use Cases
@@ -94,19 +96,20 @@ void setupServiceLocator() {
   di.registerFactory(() => ProfileBloc(di(), di(), di()));
 
   //home
-   // BLoC
-  di.registerFactory(() => HomeBloc());
+// BLoC
+  di.registerFactory(() =>
+      HomeBloc(di<GetCategoriesUseCase>(), di<GetProductsByCategoryUseCase>()));
 
-  // UseCase
+// UseCase
   di.registerLazySingleton(() => GetCategoriesUseCase(di()));
+  di.registerLazySingleton(() => GetProductsByCategoryUseCase(di()));
 
-  // Repository
-  di.registerLazySingleton<HomeRepository>(() =>HomeRepositoryImpl(di()));
+// Repository
+  di.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(di()));
 
-  // DataSource
+// DataSource
   di.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(di()));
 
-  // External
+// External
   di.registerLazySingleton(() => Dio());
-
 }

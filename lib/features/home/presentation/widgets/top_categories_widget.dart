@@ -27,7 +27,9 @@ class TopCategoriesWidget extends StatelessWidget {
 
           return InkWell(
             onTap: () {
-              context.read<HomeBloc>().add(SelectCategoryEvent(category));
+              context
+                  .read<HomeBloc>()
+                  .add(FetchProductsByCategoryEvent(category));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +41,7 @@ class TopCategoriesWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 const SizedBox(height: 8),
-                // Text(category),
+                Text(category),
               ],
             ),
           );
