@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? username;
-  String? userPhotoUrl; // Add user photo URL
+  String? userPhotoUrl; 
   late Box<UserModel> userBox;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -43,13 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
       setState(() {
         username = userModel.userName;
-        userPhotoUrl = userModel.imageUrl; // Fetch user photo URL from Hive
+        userPhotoUrl = userModel.imageUrl;
       });
     } catch (e) {
       print('Error fetching user from Hive: $e');
       setState(() {
         username = 'Guest';
-        userPhotoUrl = null; // Set photo URL to null if not available
+        userPhotoUrl = null; 
       });
     }
   }
@@ -84,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
           drawer: DrawerWidget(
             onLogout: _logout,
             uid: username ?? 'Guest',
-            username: username, // Pass username to DrawerWidget
-            userPhotoUrl: userPhotoUrl, // Pass user photo URL to DrawerWidget
+            username: username,
+            userPhotoUrl: userPhotoUrl,
           ),
           body: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
