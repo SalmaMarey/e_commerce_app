@@ -17,7 +17,7 @@ class AppTextStyles {
       );
   static TextStyle get font18Bold => TextStyle(
         fontSize: 18.sp,
-        color: AppColors.primaryColor,
+        color: AppColors.textColor,
         fontWeight: FontWeight.bold,
       );
   static TextStyle get font52Bold => TextStyle(

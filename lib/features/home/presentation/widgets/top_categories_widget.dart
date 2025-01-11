@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
+import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class TopCategoriesWidget extends StatelessWidget {
         (context, index) {
           final category = categories[index];
           final imagePath =
-              categoryImages[category] ?? "assets/images/error_image.png";
+              categoryImages[category] ?? Assets.errorImage;
           final isSelected = category == selectedCategory;
 
           final displayedCategory = modifyCategoryName(index, category);

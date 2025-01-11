@@ -5,10 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HeaderWidget extends StatelessWidget {
   final String? username;
-  final VoidCallback onLogout;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const HeaderWidget(
-      {super.key, required this.username, required this.onLogout});
+  const HeaderWidget({
+    super.key,
+    required this.username,
+    required this.scaffoldKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,9 @@ class HeaderWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  scaffoldKey.currentState?.openDrawer();
+                },
                 child: CircleAvatar(
                   radius: 25.r,
                   backgroundColor: AppColors.textForm,
@@ -43,10 +48,6 @@ class HeaderWidget extends StatelessWidget {
                     color: AppColors.primaryColor,
                   ),
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.logout, color: AppColors.primaryColor),
-                onPressed: onLogout,
               ),
             ],
           ),
