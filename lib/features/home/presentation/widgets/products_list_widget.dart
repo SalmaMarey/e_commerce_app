@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/fav_icon.dart';
@@ -36,14 +37,20 @@ class ProductsListWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(10.r),
+                        child: CachedNetworkImage(
+                          imageUrl: product.image,
+                          width: 120.w,
+                          height: 120.h,
+                          // fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
                           ),
-                          child: Image.network(
-                            product.image,
-                            width: 120.w,
-                            height: 120.h,
+                          errorWidget: (context, url, error) => Center(
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                              size: 40.w,
+                            ),
                           ),
                         ),
                       ),
