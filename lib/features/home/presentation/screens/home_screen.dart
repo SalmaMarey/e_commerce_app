@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
+import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_state.dart';
+import 'package:e_commerce_app/features/home/presentation/widgets/drawer_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/products_list_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/top_categories_widget.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/header_widget.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -23,26 +26,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? username;
+  String? userPhotoUrl; // Add user photo URL
   late Box<UserModel> userBox;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _fetchUsernameFromHive();
+    _fetchUserDataFromHive();
   }
 
-  void _fetchUsernameFromHive() async {
+  void _fetchUserDataFromHive() async {
     try {
       userBox = await Hive.openBox<UserModel>('userBox');
       final userModel = userBox.values.first;
 
       setState(() {
         username = userModel.userName;
+        userPhotoUrl = userModel.imageUrl; // Fetch user photo URL from Hive
       });
     } catch (e) {
       print('Error fetching user from Hive: $e');
       setState(() {
         username = 'Guest';
+        userPhotoUrl = null; // Set photo URL to null if not available
       });
     }
   }
@@ -63,17 +70,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> categoryImages = {
-      'electronics': 'assets/icons/elec_icon.png',
-      'jewelery': 'assets/icons/jewelery_icon.png',
-      "men's clothing": 'assets/icons/clothing_icon.png',
-      "women's clothing": 'assets/icons/women.png',
+      'electronics': Assets.elecIcon,
+      'jewelery': Assets.jeweleryIcon,
+      "men's clothing": Assets.circleShape,
+      "women's clothing": Assets.womenIcon,
     };
-
     return BlocProvider(
       create: (context) => di<HomeBloc>()..add(FetchCategoriesEvent()),
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {},
         child: Scaffold(
+          key: _scaffoldKey,
+          drawer: DrawerWidget(
+            onLogout: _logout,
+            uid: username ?? 'Guest',
+            username: username, // Pass username to DrawerWidget
+            userPhotoUrl: userPhotoUrl, // Pass user photo URL to DrawerWidget
+          ),
           body: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               if (state is HomeLoading) {
@@ -91,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SliverToBoxAdapter(
                       child: HeaderWidget(
                         username: username,
-                        onLogout: _logout,
+                        scaffoldKey: _scaffoldKey,
                       ),
                     ),
                     SliverToBoxAdapter(

@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/screens/login_screen.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/screens/register_screen.dart';
+import 'package:e_commerce_app/features/home/presentation/screens/categories_screen.dart';
 import 'package:e_commerce_app/features/home/presentation/screens/layout_screen.dart';
 import 'package:e_commerce_app/features/splash_onboarding/screens/onboarding_screen.dart';
 import 'package:e_commerce_app/features/splash_onboarding/screens/splash_screen.dart';
@@ -34,6 +35,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
         );
+          case Routes.categories:
+        return MaterialPageRoute(
+          builder: (_) => const CategoriesScreen(),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
