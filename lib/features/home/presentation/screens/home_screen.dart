@@ -15,8 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 
-
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -66,9 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Map<String, String> categoryImages = {
       'electronics': 'assets/icons/elec_icon.png',
-      'jewelery': 'assets/icons/clothing_icon.png',
-      "men's clothing": 'assets/icons/home_icon.png',
-      "women's clothing": 'assets/icons/books_icon.png',
+      'jewelery': 'assets/icons/jewelery_icon.png',
+      "men's clothing": 'assets/icons/clothing_icon.png',
+      "women's clothing": 'assets/icons/women.png',
     };
 
     return BlocProvider(
@@ -107,7 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 20.h, left: 20.w),
+                        padding: EdgeInsets.only(
+                          top: 20.h,
+                          left: 20.w,
+                        ),
                         child: Text(
                           'Top Categories',
                           style: AppTextStyles.font20Bold,
@@ -121,8 +122,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     if (state is ProductsLoading)
                       const SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(),
+                        child: SizedBox(
+                          height: 350,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ),
                     if (state is HomeLoaded && state.products.isNotEmpty)

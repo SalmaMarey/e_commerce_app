@@ -69,10 +69,19 @@ class AppTextStyles {
         fontWeight: FontWeight.w400,
         color: AppColors.primaryColor,
       );
+  static TextStyle get font14RegularBlack => TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w400,
+        color: AppColors.textColor,
+      );
   static TextStyle get font14Bold => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.primaryColor,
+      );  static TextStyle get font14BoldBlack => TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textColor,
       );
   static TextStyle get font16Bold => TextStyle(
         fontSize: 16.sp,
@@ -83,5 +92,10 @@ class AppTextStyles {
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.grey0,
+      );
+        static TextStyle get font16BoldPrimaryColor => TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.primaryColor,
       );
 }
