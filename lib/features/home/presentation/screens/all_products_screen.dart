@@ -1,13 +1,16 @@
+import 'package:e_commerce_app/core/services/di.dart';
+import 'package:e_commerce_app/features/products_details/presentation/controller/products_details_bloc.dart';
+import 'package:e_commerce_app/features/products_details/presentation/screens/products_details_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/features/home/presentation/widgets/fav_icon.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_state.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class AllProductsScreen extends StatefulWidget {
   final String category;
@@ -66,67 +69,80 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12.r),
-                                child: CachedNetworkImage(
-                                  imageUrl: product.image,
-                                  width: 120.w,
-                                  height: 120.h,
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error, size: 40),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                          create: (context) => di<ProductDetailsBloc>(),
+                          child: ProductDetailsScreen(productId: product.id),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  child: CachedNetworkImage(
+                                    imageUrl: product.image,
+                                    width: 120.w,
+                                    height: 120.h,
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Center(
+                                      child: Icon(Icons.error, size: 40),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8.w, vertical: 4.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.title,
-                                  style: AppTextStyles.font14Bold
-                                      .copyWith(color: AppColors.textColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 2.h),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    '\$${product.price.toStringAsFixed(2)}',
-                                    style: AppTextStyles.font14Bold,
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8.w, vertical: 4.h),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.title,
+                                    style: AppTextStyles.font14Bold
+                                        .copyWith(color: AppColors.textColor),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 2.h),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '\$${product.price.toStringAsFixed(2)}',
+                                      style: AppTextStyles.font14Bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        top: 8.h,
-                        right: 8.w,
-                        child: const FavoriteIcon(),
-                      ),
-                    ],
+                          ],
+                        ),
+                        Positioned(
+                          top: 8.h,
+                          right: 8.w,
+                          child: const FavoriteIcon(),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
