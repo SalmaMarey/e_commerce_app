@@ -20,6 +20,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final categories = await getCategoriesUseCase.call();
       emit(HomeLoaded(categories));
+
+      if (categories.isNotEmpty) {
+        add(FetchProductsByCategoryEvent(categories.first));
+      }
     } catch (e) {
       emit(HomeError('Failed to fetch categories: $e'));
     }
@@ -29,11 +33,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       FetchProductsByCategoryEvent event, Emitter<HomeState> emit) async {
     if (state is HomeLoaded) {
       final currentState = state as HomeLoaded;
-      emit(HomeLoading());
+      emit(ProductsLoading(
+          currentState.categories, currentState.selectedCategory));
       try {
         final products =
             await getProductsByCategoryUseCase.call(event.category);
-        emit(HomeLoaded(currentState.categories, products: products));
+        emit(HomeLoaded(
+          currentState.categories,
+          products: products,
+          selectedCategory: event.category,
+        ));
       } catch (e) {
         emit(HomeError('Failed to fetch products: $e'));
       }

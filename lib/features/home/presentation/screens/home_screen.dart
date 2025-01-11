@@ -17,7 +17,6 @@ import 'package:e_commerce_app/core/models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -65,67 +64,82 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Map<String, String> categoryImages = {
       'electronics': 'assets/icons/elec_icon.png',
-      'jewelery': 'assets/icons/clothing_icon.png',
-      "men's clothing": 'assets/icons/home_icon.png',
-      "women's clothing": 'assets/icons/books_icon.png',
+      'jewelery': 'assets/icons/jewelery_icon.png',
+      "men's clothing": 'assets/icons/clothing_icon.png',
+      "women's clothing": 'assets/icons/women.png',
     };
 
     return BlocProvider(
       create: (context) => di<HomeBloc>()..add(FetchCategoriesEvent()),
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is HomeLoaded) {
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: HeaderWidget(
-                    username: username,
-                    onLogout: _logout,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 1.h),
-                    child: SizedBox(
-                      height: 150.h,
-                      child: const OffersWidget(),
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 20.h, left: 20.w),
-                    child: Text(
-                      'Top Categories',
-                      style: AppTextStyles.font20Bold,
-                    ),
-                  ),
-                ),
-                TopCategoriesWidget(
-                  categories: state.categories,
-                  categoryImages: categoryImages,
-                ),
-                if (state.products.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 20.h, left: 20.w),
-                      child: Text(
-                        'Products',
-                        style: AppTextStyles.font20Bold,
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {},
+        child: Scaffold(
+          body: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              if (state is HomeLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is HomeLoaded || state is ProductsLoading) {
+                final categories = (state is HomeLoaded)
+                    ? state.categories
+                    : (state as ProductsLoading).categories;
+                final selectedCategory = (state is HomeLoaded)
+                    ? state.selectedCategory
+                    : (state as ProductsLoading).selectedCategory;
+
+                return CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: HeaderWidget(
+                        username: username,
+                        onLogout: _logout,
                       ),
                     ),
-                  ),
-                if (state.products.isNotEmpty)
-                  ProductsListWidget(products: state.products),
-              ],
-            );
-          } else if (state is HomeError) {
-            return Center(child: Text(state.message));
-          }
-          return const SizedBox();
-        },
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        child: SizedBox(
+                          height: 150.h,
+                          child: const OffersWidget(),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 20.h,
+                          left: 20.w,
+                        ),
+                        child: Text(
+                          'Top Categories',
+                          style: AppTextStyles.font20Bold,
+                        ),
+                      ),
+                    ),
+                    TopCategoriesWidget(
+                      categories: categories,
+                      categoryImages: categoryImages,
+                      selectedCategory: selectedCategory,
+                    ),
+                    if (state is ProductsLoading)
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 350,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
+                    if (state is HomeLoaded && state.products.isNotEmpty)
+                      ProductsListWidget(products: state.products),
+                  ],
+                );
+              } else if (state is HomeError) {
+                return Center(child: Text(state.message));
+              }
+              return const SizedBox();
+            },
+          ),
+        ),
       ),
     );
   }

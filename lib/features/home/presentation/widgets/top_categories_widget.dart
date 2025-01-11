@@ -1,14 +1,36 @@
+import 'package:e_commerce_app/core/themes/app_colors.dart';
+import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TopCategoriesWidget extends StatelessWidget {
   final List<String> categories;
   final Map<String, String> categoryImages;
+  final String? selectedCategory;
 
-  const TopCategoriesWidget(
-      {super.key, required this.categories, required this.categoryImages});
+  const TopCategoriesWidget({
+    super.key,
+    required this.categories,
+    required this.categoryImages,
+    this.selectedCategory,
+  });
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  String modifyCategoryName(int index, String category) {
+    if (index == 2) {
+      return "Men's Wear";
+    } else if (index == 3) {
+      return "Women's Wear";
+    }
+    return category;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +46,9 @@ class TopCategoriesWidget extends StatelessWidget {
           final category = categories[index];
           final imagePath =
               categoryImages[category] ?? "assets/images/error_image.png";
+          final isSelected = category == selectedCategory;
+
+          final displayedCategory = modifyCategoryName(index, category);
 
           return InkWell(
             onTap: () {
@@ -34,14 +59,28 @@ class TopCategoriesWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  imagePath,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isSelected
+                        ? AppColors.primaryColor
+                        : Colors.transparent,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset(
+                    imagePath,
+                    width: 40.w,
+                    height: 40.h,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(category),
+                SizedBox(height: 8.h),
+                Text(
+                  capitalizeFirstLetter(displayedCategory),
+                  style: isSelected
+                      ? AppTextStyles.font14Regular
+                      : AppTextStyles.font14RegularBlack,
+                ),
               ],
             ),
           );

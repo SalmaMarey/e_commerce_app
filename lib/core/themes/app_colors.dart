@@ -13,4 +13,5 @@ class AppColors {
   static const Color grey0 = Color.fromARGB(255, 174, 173, 173);
   static const Color orangeContainer = Color(0xffF17547);
   static const Color greenContainer = Color(0xff50D63B);
+  static const Color greyContainer = Color(0xffF8F8F8);
 }
