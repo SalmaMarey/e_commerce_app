@@ -13,3 +13,9 @@ class FetchProductsByCategoryEvent extends HomeEvent {
 
   FetchProductsByCategoryEvent(this.category);
 }
+
+class SearchProductsEvent extends HomeEvent {
+  final String query;
+
+  SearchProductsEvent(this.query);
+}

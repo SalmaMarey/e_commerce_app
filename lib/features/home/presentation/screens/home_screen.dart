@@ -17,7 +17,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
@@ -26,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? username;
-  String? userPhotoUrl; 
+  String? userPhotoUrl;
   late Box<UserModel> userBox;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Error fetching user from Hive: $e');
       setState(() {
         username = 'Guest';
-        userPhotoUrl = null; 
+        userPhotoUrl = null;
       });
     }
   }
@@ -72,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final Map<String, String> categoryImages = {
       'electronics': Assets.elecIcon,
       'jewelery': Assets.jeweleryIcon,
-      "men's clothing": Assets.circleShape,
+      "men's clothing": Assets.mensIcon,
       "women's clothing": Assets.womenIcon,
     };
     return BlocProvider(
@@ -105,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: HeaderWidget(
                         username: username,
                         scaffoldKey: _scaffoldKey,
+                        homeBloc: context.read<HomeBloc>(),
                       ),
                     ),
                     SliverToBoxAdapter(
@@ -142,8 +142,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                    if (state is HomeLoaded && state.products.isNotEmpty)
-                      ProductsListWidget(products: state.products),
+                    if (state is HomeLoaded)
+                      state.products.isEmpty
+                          ? SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: 300.h,
+                                child: Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 20.h),
+                                    child: Text(
+                                      'No products found.',
+                                      style: AppTextStyles.font16BoldGrey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : ProductsListWidget(products: state.products),
                   ],
                 );
               } else if (state is HomeError) {

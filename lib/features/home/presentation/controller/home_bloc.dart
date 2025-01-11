@@ -12,6 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       : super(HomeInitial()) {
     on<FetchCategoriesEvent>(_onFetchCategories);
     on<FetchProductsByCategoryEvent>(_onFetchProductsByCategory);
+    on<SearchProductsEvent>(_onSearchProducts);
   }
 
   void _onFetchCategories(
@@ -19,7 +20,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
     try {
       final categories = await getCategoriesUseCase.call();
-      emit(HomeLoaded(categories));
+      emit(HomeLoaded(
+        categories,
+        originalProducts: const [],
+      ));
 
       if (categories.isNotEmpty) {
         add(FetchProductsByCategoryEvent(categories.first));
@@ -33,8 +37,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       FetchProductsByCategoryEvent event, Emitter<HomeState> emit) async {
     if (state is HomeLoaded) {
       final currentState = state as HomeLoaded;
-      emit(ProductsLoading(
-          currentState.categories, currentState.selectedCategory));
+      emit(ProductsLoading(currentState.categories, event.category));
       try {
         final products =
             await getProductsByCategoryUseCase.call(event.category);
@@ -42,9 +45,36 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           currentState.categories,
           products: products,
           selectedCategory: event.category,
+          originalProducts: products,
         ));
       } catch (e) {
         emit(HomeError('Failed to fetch products: $e'));
+      }
+    }
+  }
+
+  void _onSearchProducts(SearchProductsEvent event, Emitter<HomeState> emit) {
+    if (state is HomeLoaded) {
+      final currentState = state as HomeLoaded;
+      if (event.query.isEmpty) {
+        emit(HomeLoaded(
+          currentState.categories,
+          products: currentState.originalProducts,
+          selectedCategory: currentState.selectedCategory,
+          originalProducts: currentState.originalProducts,
+        ));
+      } else {
+        final filteredProducts = currentState.originalProducts
+            .where((product) =>
+                product.title.toLowerCase().contains(event.query.toLowerCase()))
+            .toList();
+
+        emit(HomeLoaded(
+          currentState.categories,
+          products: filteredProducts,
+          selectedCategory: currentState.selectedCategory,
+          originalProducts: currentState.originalProducts,
+        ));
       }
     }
   }
