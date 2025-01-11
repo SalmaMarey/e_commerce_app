@@ -9,10 +9,15 @@ class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {
   final List<String> categories;
   final List<Product> products;
+  final List<Product> originalProducts;
   final String? selectedCategory;
 
-  HomeLoaded(this.categories,
-      {this.products = const [], this.selectedCategory});
+  HomeLoaded(
+    this.categories, {
+    this.products = const [],
+    this.selectedCategory,
+    required this.originalProducts,
+  });
 }
 
 class CategorySelected extends HomeState {

@@ -2,6 +2,7 @@
 
 import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Image.asset(Assets.logoApp)),
+      body: Center(child: Image.asset(Assets.logoApp,width: 120.w,height: 120.h,)),
     );
   }
 }

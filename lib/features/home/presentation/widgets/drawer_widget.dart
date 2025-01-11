@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart'; 
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
+import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
@@ -34,13 +36,22 @@ class DrawerWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 30.r,
-                  backgroundImage:
-                      userPhotoUrl != null ? NetworkImage(userPhotoUrl!) : null,
-                  child: userPhotoUrl == null
-                      ? const Icon(Icons.person, size: 40)
-                      : null,
+                CachedNetworkImage(
+                  imageUrl: userPhotoUrl ?? Assets.errorImage,
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 30.r,
+                    backgroundImage: imageProvider,
+                  ),
+                  placeholder: (context, url) => CircleAvatar(
+                    radius: 30.r,
+                    child: const CircularProgressIndicator(
+                      color: AppColors.scaffoldBackgroundLightColor,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: 30.r,
+                    child: const Icon(Icons.person, size: 40),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 Text(

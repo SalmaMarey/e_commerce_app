@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
@@ -45,13 +46,21 @@ class ProfileHeader extends StatelessWidget {
                   child: imageUrl.isNotEmpty
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: Image.network(
-                            imageUrl,
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              Assets.profilePhoto,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         )
                       : Image.asset(
                           Assets.profilePhoto,
+                          fit: BoxFit.cover,
                         ),
                 ),
                 TextButton(
