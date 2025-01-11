@@ -16,6 +16,11 @@ import 'package:e_commerce_app/features/home/domain/home_repo.dart';
 import 'package:e_commerce_app/features/home/domain/usecases/categories_usecase.dart';
 import 'package:e_commerce_app/features/home/domain/usecases/get_product_by_category_use_case.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
+import 'package:e_commerce_app/features/products_details/data/remote/products_details_data_source.dart';
+import 'package:e_commerce_app/features/products_details/data/remote/products_details_data_source_impl.dart';
+import 'package:e_commerce_app/features/products_details/domain/products_details_repo.dart';
+import 'package:e_commerce_app/features/products_details/domain/usecases/get_products_details_usecase.dart';
+import 'package:e_commerce_app/features/products_details/presentation/controller/products_details_bloc.dart';
 import 'package:e_commerce_app/features/profile/data/local/profile_local_data_source.dart';
 import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dart';
 import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source.dart';
@@ -31,6 +36,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/features/auth/register/data/remote/register_data_source_impl.dart';
 import 'package:e_commerce_app/features/auth/register/data/register_repo_impl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../features/products_details/data/products_details_repo_impl.dart';
 
 final di = GetIt.instance;
 
@@ -112,4 +119,12 @@ void setupServiceLocator() {
 
 // External
   di.registerLazySingleton(() => Dio());
+
+  // Product Details Feature
+  di.registerFactory(() => ProductDetailsBloc(di()));
+  di.registerFactory(() => GetProductDetailsUseCase(di()));
+  di.registerFactory<ProductDetailsRepository>(
+      () => ProductDetailsRepositoryImpl(di()));
+  di.registerFactory<ProductDetailsDataSource>(
+      () => ProductDetailsDataSourceImpl(di()));
 }
