@@ -3,6 +3,7 @@ import 'package:e_commerce_app/features/auth/log_in/presentation/screens/login_s
 import 'package:e_commerce_app/features/auth/register/presentation/screens/register_screen.dart';
 import 'package:e_commerce_app/features/home/presentation/screens/layout_screen.dart';
 import 'package:e_commerce_app/features/splash_onboarding/screens/onboarding_screen.dart';
+import 'package:e_commerce_app/features/splash_onboarding/screens/splash_screen.dart';
 import 'package:e_commerce_app/features/splash_onboarding/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,10 @@ class AppRouter {
       case Routes.layout:
         return MaterialPageRoute(
           builder: (_) => const LayoutScreen(),
+        );
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashScreen(),
         );
       default:
         return MaterialPageRoute(
