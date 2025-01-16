@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
-import 'package:e_commerce_app/features/favorite/presentation/widgets/fav_icon.dart';
+import 'package:e_commerce_app/features/products_details/presentation/widgets/fav_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
