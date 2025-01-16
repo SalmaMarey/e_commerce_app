@@ -136,11 +136,11 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                             ),
                           ],
                         ),
-                        Positioned(
-                          top: 8.h,
-                          right: 8.w,
-                          child: const FavoriteIcon(),
-                        ),
+                        // Positioned(
+                        //   top: 8.h,
+                        //   right: 8.w,
+                        //   child: const FavoriteIcon(),
+                        // ),
                       ],
                     ),
                   ),

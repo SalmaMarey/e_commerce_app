@@ -97,11 +97,11 @@ class ProductsListWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const Positioned(
-                      top: 0,
-                      right: 0,
-                      child: FavoriteIcon(),
-                    ),
+                    // const Positioned(
+                    //   top: 0,
+                    //   right: 0,
+                    //   child: FavoriteIcon(),
+                    // ),
                   ],
                 ),
               ),

@@ -1,10 +1,92 @@
+// ignore_for_file: avoid_print
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_app/core/models/product_model.dart';
+import 'package:e_commerce_app/core/themes/app_colors.dart';
+import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class FavoriteScreen extends StatelessWidget {
-  const FavoriteScreen({super.key});
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Text('FavoriteScreen'),);
+    final favoritesBox = Hive.box<Product>('favoritesBox');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Favorites',
+          style:
+              AppTextStyles.font22Bold.copyWith(color: AppColors.primaryColor),
+        ),
+        automaticallyImplyLeading: false,
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: favoritesBox.listenable(),
+        builder: (context, Box<Product> box, _) {
+          final favoriteProducts = box.values.toList();
+          print('FavoritesScreen: ${favoriteProducts.length} favorites');
+          return favoriteProducts.isEmpty
+              ? Center(
+                  child: Text(
+                    'No favorites yet!',
+                    style: AppTextStyles.font16BoldPrimaryColor,
+                  ),
+                )
+              : ListView.builder(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
+                  itemCount: favoriteProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = favoriteProducts[index];
+                    return Card(
+                      elevation: 4,
+                      margin: EdgeInsets.only(bottom: 16.h),
+                      child: ListTile(
+                        leading: CachedNetworkImage(
+                          imageUrl: product.image,
+                          width: 70.w,
+                          height: 70.h,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) => const Center(
+                            child: Icon(Icons.error, size: 40),
+                          ),
+                        ),
+                        title: Text(
+                          product.title,
+                          maxLines: 1,
+                          style: AppTextStyles.font14Bold
+                              .copyWith(color: AppColors.textColor),
+                        ),
+                        subtitle: Text(
+                          '\$${product.price}',
+                          style: AppTextStyles.font14Regular,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.favorite,
+                            color:  AppColors.redColor
+                          ),
+                          onPressed: () async {
+                            await favoritesBox.delete(product.id);
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Removed from favorites'),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                );
+        },
+      ),
+    );
   }
 }

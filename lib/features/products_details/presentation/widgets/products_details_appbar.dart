@@ -1,17 +1,20 @@
+import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/features/favorite/presentation/widgets/fav_icon.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailsAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const ProductDetailsAppBar({super.key});
+  final Product product;
+
+  const ProductDetailsAppBar({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Center(
         child: Text(
           'Products Details',
@@ -35,7 +38,7 @@ class ProductDetailsAppBar extends StatelessWidget
         CircleAvatar(
           radius: 25.r,
           backgroundColor: AppColors.greyContainer,
-          child: const FavoriteIcon(),
+          child: FavoriteIcon(product: product),
         ),
       ],
     );

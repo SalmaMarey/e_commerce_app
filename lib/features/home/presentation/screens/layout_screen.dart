@@ -25,16 +25,16 @@ class _LayoutScreenState extends State<LayoutScreen> {
     if (user == null) {
       return [
         const HomeScreen(),
-        const FavoriteScreen(),
+        const FavoritesScreen(),
         const CartScreen(),
         const Center(child: Text('Please log in to view profile')),
       ];
     }
     return [
       const HomeScreen(),
-      const FavoriteScreen(),
+      const FavoritesScreen(),
       const CartScreen(),
-      BlocProvider( 
+      BlocProvider(
         create: (context) => di<ProfileBloc>(),
         child: ProfileScreen(uid: user.uid),
       ),

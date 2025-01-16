@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/core/routing/app_router.dart';
 import 'package:e_commerce_app/core/routing/routes.dart';
@@ -27,6 +28,8 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox<UserModel>('userBox');
+  Hive.registerAdapter(ProductAdapter());
+  await Hive.openBox<Product>('favoritesBox');
   setupServiceLocator();
 
   runApp(const MyApp());

@@ -35,10 +35,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
         );
-          case Routes.categories:
-        return MaterialPageRoute(
-          builder: (_) => const CategoriesScreen(),
-        );
+        //   case Routes.categories:
+        // return MaterialPageRoute(
+        //   builder: (_) => const CategoriesScreen(),
+        // );
 
       default:
         return MaterialPageRoute(

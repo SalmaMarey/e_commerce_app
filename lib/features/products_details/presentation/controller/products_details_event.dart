@@ -5,3 +5,5 @@ class FetchProductDetailsEvent extends ProductDetailsEvent {
 
   FetchProductDetailsEvent(this.productId);
 }
+
+class ToggleFavoriteEvent extends ProductDetailsEvent {}
