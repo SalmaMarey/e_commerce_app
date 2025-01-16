@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
-import 'package:e_commerce_app/features/favorite/presentation/widgets/fav_icon.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_event.dart';
 import 'package:e_commerce_app/features/home/presentation/controller/home_state.dart';
@@ -86,8 +85,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
                     ),
-                    child: Stack(
-                      children: [
+                    child: 
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -136,14 +134,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                             ),
                           ],
                         ),
-                        Positioned(
-                          top: 8.h,
-                          right: 8.w,
-                          child: const FavoriteIcon(),
-                        ),
-                      ],
-                    ),
-                  ),
+                       
+                  )
                 );
               },
             );

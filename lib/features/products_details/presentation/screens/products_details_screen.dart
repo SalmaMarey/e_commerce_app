@@ -22,6 +22,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
     context
         .read<ProductDetailsBloc>()
         .add(FetchProductDetailsEvent(widget.productId));
@@ -37,7 +38,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           } else if (state is ProductDetailsLoaded) {
             final product = state.product;
             return Scaffold(
-              appBar: const ProductDetailsAppBar(),
+              appBar: ProductDetailsAppBar(product: product),
               body: Column(
                 children: [
                   Expanded(

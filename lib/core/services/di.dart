@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/login_repo_impl.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source_impl.dart';
@@ -19,7 +20,9 @@ import 'package:e_commerce_app/features/home/presentation/controller/home_bloc.d
 import 'package:e_commerce_app/features/products_details/data/remote/products_details_data_source.dart';
 import 'package:e_commerce_app/features/products_details/data/remote/products_details_data_source_impl.dart';
 import 'package:e_commerce_app/features/products_details/domain/products_details_repo.dart';
+import 'package:e_commerce_app/features/products_details/domain/usecases/check_favorite_usecase.dart';
 import 'package:e_commerce_app/features/products_details/domain/usecases/get_products_details_usecase.dart';
+import 'package:e_commerce_app/features/products_details/domain/usecases/toggle_favorite_usecase.dart';
 import 'package:e_commerce_app/features/products_details/presentation/controller/products_details_bloc.dart';
 import 'package:e_commerce_app/features/profile/data/local/profile_local_data_source.dart';
 import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dart';
@@ -121,10 +124,23 @@ void setupServiceLocator() {
   di.registerLazySingleton(() => Dio());
 
   // Product Details Feature
-  di.registerFactory(() => ProductDetailsBloc(di()));
+  di.registerSingleton<Box<Product>>(Hive.box('favoritesBox'));
+
+  di.registerFactory(() => ProductDetailsBloc(
+        getProductDetailsUseCase: di(),
+        toggleFavoriteUseCase: di(),
+        checkFavoriteUseCase: di(),
+      ));
+
   di.registerFactory(() => GetProductDetailsUseCase(di()));
+  di.registerFactory(() => ToggleFavoriteUseCase(di()));
+  di.registerFactory(() => CheckFavoriteUseCase(di()));
+
   di.registerFactory<ProductDetailsRepository>(
-      () => ProductDetailsRepositoryImpl(di()));
+    () => ProductDetailsRepositoryImpl(di()),
+  );
+
   di.registerFactory<ProductDetailsDataSource>(
-      () => ProductDetailsDataSourceImpl(di()));
+    () => ProductDetailsDataSourceImpl(di()),
+  );
 }
