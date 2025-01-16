@@ -1,6 +1,6 @@
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/features/cart/presentation/cart_screen.dart';
-import 'package:e_commerce_app/features/layout/screens/favorite_screen.dart';
+import 'package:e_commerce_app/features/fav/presentation/screens/favorite_screen.dart';
 import 'package:e_commerce_app/features/home/presentation/screens/home_screen.dart';
 import 'package:e_commerce_app/features/profile/presentation/controller/profile_bloc.dart';
 import 'package:e_commerce_app/features/profile/presentation/screens/profile_screen.dart';
