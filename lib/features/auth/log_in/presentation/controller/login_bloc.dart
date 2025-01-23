@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/usecases/login_use_case.dart';
 import 'package:e_commerce_app/features/auth/log_in/presentation/controller/login_event.dart';
@@ -36,7 +37,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
             emit(LoginSuccess(user: userModel));
 
-            // Save user to Hive
             saveUserToHive(userModel);
           } else {
             emit(LoginFailure(
@@ -52,10 +52,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
   }
 
-  void saveUserToHive(UserModel user) {
+  void saveUserToHive(UserModel user) async {
     print('Saving user to Hive...');
     final userBox = Hive.box<UserModel>('userBox');
     userBox.put(user.id, user);
+
+    await Hive.openBox<Product>('favoritesBox_${user.id}');
     print('User data saved successfully in both Firebase and Hive.');
   }
+}
+
+Future<void> initializeUserFavoritesBox(String userId) async {
+  await Hive.openBox<Product>('favoritesBox_$userId');
 }

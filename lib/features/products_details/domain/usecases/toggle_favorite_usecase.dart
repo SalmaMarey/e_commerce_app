@@ -4,11 +4,12 @@ import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:hive/hive.dart';
 
 class ToggleFavoriteUseCase {
-  final Box<Product> favoritesBox;
+  final String userId;
 
-  ToggleFavoriteUseCase(this.favoritesBox);
+  ToggleFavoriteUseCase(this.userId);
 
   Future<void> call(Product product) async {
+    final favoritesBox = await Hive.openBox<Product>('favoritesBox_$userId');
     product.isFavorite = !product.isFavorite;
     if (product.isFavorite) {
       await favoritesBox.put(product.id, product);
