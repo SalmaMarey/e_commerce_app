@@ -21,11 +21,13 @@ class ProductDetailsBloc
   }
 
   void _onFetchProductDetails(
-      FetchProductDetailsEvent event, Emitter<ProductDetailsState> emit) async {
+    FetchProductDetailsEvent event,
+    Emitter<ProductDetailsState> emit,
+  ) async {
     emit(ProductDetailsLoading());
     try {
       final product = await getProductDetailsUseCase.call(event.productId);
-      final isFavorited = checkFavoriteUseCase(product);
+      final isFavorited = await checkFavoriteUseCase(product);
       emit(ProductDetailsLoaded(product, isFavorited));
     } catch (e) {
       emit(ProductDetailsError('Failed to fetch product details: $e'));
@@ -33,11 +35,13 @@ class ProductDetailsBloc
   }
 
   void _onToggleFavorite(
-      ToggleFavoriteEvent event, Emitter<ProductDetailsState> emit) async {
+    ToggleFavoriteEvent event,
+    Emitter<ProductDetailsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is ProductDetailsLoaded) {
       await toggleFavoriteUseCase(currentState.product);
-      final isFavorited = checkFavoriteUseCase(currentState.product);
+      final isFavorited = await checkFavoriteUseCase(currentState.product);
       emit(ProductDetailsLoaded(currentState.product, isFavorited));
     }
   }

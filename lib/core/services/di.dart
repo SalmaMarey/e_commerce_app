@@ -121,26 +121,37 @@ void setupServiceLocator() {
   di.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(di()));
 
 // External
-  di.registerLazySingleton(() => Dio());
 
-  // Product Details Feature
+  di.registerSingleton<Dio>(Dio());
+
+  // Register Hive Box
   di.registerSingleton<Box<Product>>(Hive.box('favoritesBox'));
 
-  di.registerFactory(() => ProductDetailsBloc(
-        getProductDetailsUseCase: di(),
-        toggleFavoriteUseCase: di(),
-        checkFavoriteUseCase: di(),
-      ));
-
-  di.registerFactory(() => GetProductDetailsUseCase(di()));
-  di.registerFactory(() => ToggleFavoriteUseCase(di()));
-  di.registerFactory(() => CheckFavoriteUseCase(di()));
-
-  di.registerFactory<ProductDetailsRepository>(
-    () => ProductDetailsRepositoryImpl(di()),
+  di.registerFactory<ProductDetailsDataSource>(
+    () => ProductDetailsDataSourceImpl(di<Dio>()),
   );
 
-  di.registerFactory<ProductDetailsDataSource>(
-    () => ProductDetailsDataSourceImpl(di()),
+  di.registerFactory<ProductDetailsRepository>(
+    () => ProductDetailsRepositoryImpl(di<ProductDetailsDataSource>()),
+  );
+
+  di.registerFactory<GetProductDetailsUseCase>(
+    () => GetProductDetailsUseCase(di<ProductDetailsRepository>()),
+  );
+
+  di.registerFactoryParam<ToggleFavoriteUseCase, String, void>(
+    (userId, _) => ToggleFavoriteUseCase(userId),
+  );
+
+  di.registerFactoryParam<CheckFavoriteUseCase, String, void>(
+    (userId, _) => CheckFavoriteUseCase(userId),
+  );
+
+  di.registerFactory<ProductDetailsBloc>(
+    () => ProductDetailsBloc(
+      getProductDetailsUseCase: di<GetProductDetailsUseCase>(),
+      toggleFavoriteUseCase: di<ToggleFavoriteUseCase>(param1: di<String>()),
+      checkFavoriteUseCase: di<CheckFavoriteUseCase>(param1: di<String>()),
+    ),
   );
 }
