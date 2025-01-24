@@ -6,6 +6,13 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
   @override
   Future<void> addToCart(String userId, Cart cart) async {
     final cartBox = await Hive.openBox<Cart>('cartBox_$userId');
+    final productExists =
+        cartBox.values.any((item) => item.productId == cart.productId);
+
+    if (productExists) {
+      throw Exception('Product already in cart');
+    }
+
     await cartBox.add(cart);
   }
 

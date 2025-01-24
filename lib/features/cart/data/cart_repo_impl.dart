@@ -11,9 +11,9 @@ class CartRepositoryImpl implements CartRepository {
   Future<bool> addToCart(String userId, Cart cart) async {
     try {
       await localDataSource.addToCart(userId, cart);
-      return true;
+      return true; 
     } catch (e) {
-      return false;
+      return false; 
     }
   }
 
@@ -23,8 +23,7 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
-  Future<void> updateCartItemQuantity(
-      String userId, Cart cartItem, int newQuantity) async {
+  Future<void> updateCartItemQuantity(String userId, Cart cartItem, int newQuantity) async {
     await localDataSource.updateCartItemQuantity(userId, cartItem, newQuantity);
   }
 

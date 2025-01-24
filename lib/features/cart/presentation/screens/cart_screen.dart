@@ -25,21 +25,6 @@ class _CartScreenState extends State<CartScreen> {
     context.read<CartBloc>().add(GetCartItemsEvent());
   }
 
-  void _updateQuantity(BuildContext context, Cart cartItem, int newQuantity) {
-    if (newQuantity > 0) {
-      context.read<CartBloc>().add(
-            UpdateCartItemQuantityEvent(
-              cartItem: cartItem,
-              newQuantity: newQuantity,
-            ),
-          );
-    } else {
-      context.read<CartBloc>().add(
-            RemoveFromCartEvent(cart: cartItem),
-          );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,81 +60,80 @@ class _CartScreenState extends State<CartScreen> {
                 itemBuilder: (context, index) {
                   final cartItem = cartItems[index];
                   return Card(
-                    elevation: 4,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      leading: CachedNetworkImage(
-                        imageUrl: cartItem.imageUrl,
-                        width: 60,
-                        height: 60,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
-                      title: Text(
-                        cartItem.productName,
-                        maxLines: 1,
-                        style: AppTextStyles.font16Bold
-                            .copyWith(color: AppColors.textColor),
-                      ),
-                      subtitle: Text(
-                        '\$${cartItem.price}',
-                        style: AppTextStyles.font14BoldBlack
-                            .copyWith(color: AppColors.primaryColor),
-                      ),
-                      trailing: SizedBox(
-                        width: 120.w,
-                        height: 30.h,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            border: Border.all(color: AppColors.primaryColor),
+                      elevation: 4,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ListTile(
+                          leading: CachedNetworkImage(
+                            imageUrl: cartItem.imageUrl,
+                            width: 60,
+                            height: 60,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: AppColors.primaryColor,
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  _updateQuantity(
-                                      context, cartItem, cartItem.quantity - 1);
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                              Text(
-                                '${cartItem.quantity}',
-                                style: AppTextStyles.font16Bold.copyWith(
-                                  color: AppColors.textColor,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: AppColors.primaryColor,
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  _updateQuantity(
-                                      context, cartItem, cartItem.quantity + 1);
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                            ],
+                          title: Text(
+                            cartItem.productName,
+                            maxLines: 1,
+                            style: AppTextStyles.font16Bold
+                                .copyWith(color: AppColors.textColor),
                           ),
-                        ),
-                      ),
-                    ),
-                  );
+                          subtitle: Text(
+                            '\$${cartItem.price}',
+                            style: AppTextStyles.font14BoldBlack
+                                .copyWith(color: AppColors.primaryColor),
+                          ),
+                          trailing: SizedBox(
+                              width: 120.w,
+                              height: 30.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  border:
+                                      Border.all(color: AppColors.primaryColor),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: AppColors.primaryColor,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        _updateQuantity(context, cartItem,
+                                            cartItem.quantity - 1);
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                    Text(
+                                      '${cartItem.quantity}',
+                                      style: AppTextStyles.font16Bold.copyWith(
+                                        color: AppColors.textColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: AppColors.primaryColor,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        _updateQuantity(context, cartItem,
+                                            cartItem.quantity + 1);
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                  ],
+                                ),
+                              ))));
                 },
               );
             }
@@ -158,5 +142,20 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  void _updateQuantity(BuildContext context, Cart cartItem, int newQuantity) {
+    if (newQuantity > 0) {
+      context.read<CartBloc>().add(
+            UpdateCartItemQuantityEvent(
+              cartItem: cartItem,
+              newQuantity: newQuantity,
+            ),
+          );
+    } else {
+      context.read<CartBloc>().add(
+            RemoveFromCartEvent(cart: cartItem),
+          );
+    }
   }
 }
