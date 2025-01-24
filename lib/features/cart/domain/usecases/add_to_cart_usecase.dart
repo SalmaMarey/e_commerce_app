@@ -6,7 +6,7 @@ class AddToCartUseCase {
 
   AddToCartUseCase({required this.repository});
 
-  Future<void> execute(String userId, Cart cart) async {
-    await repository.addToCart(userId, cart);
+  Future<bool> execute(String userId, Cart cart) async {
+    return await repository.addToCart(userId, cart);
   }
 }

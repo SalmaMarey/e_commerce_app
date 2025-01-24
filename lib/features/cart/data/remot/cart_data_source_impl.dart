@@ -16,16 +16,32 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
   }
 
   @override
-  Future<void> removeFromCart(String userId, Cart cart) async {
-    final cartBox = await Hive.openBox<Cart>('cartBox_$userId');
-    await cartBox.delete(cart);
-  }
-
-  @override
   Future<void> updateCartItemQuantity(
       String userId, Cart cartItem, int newQuantity) async {
     final cartBox = await Hive.openBox<Cart>('cartBox_$userId');
-    // final updatedCartItem = cartItem.copyWith(quantity: newQuantity);
-    // await cartBox.put(cartItem.key, updatedCartItem);
+    final index = cartBox.values
+        .toList()
+        .indexWhere((item) => item.productId == cartItem.productId);
+    if (index != -1) {
+      final updatedCartItem = Cart(
+        productId: cartItem.productId,
+        productName: cartItem.productName,
+        price: cartItem.price,
+        imageUrl: cartItem.imageUrl,
+        quantity: newQuantity,
+      );
+      await cartBox.putAt(index, updatedCartItem);
+    }
+  }
+
+  @override
+  Future<void> removeFromCart(String userId, Cart cart) async {
+    final cartBox = await Hive.openBox<Cart>('cartBox_$userId');
+    final index = cartBox.values
+        .toList()
+        .indexWhere((item) => item.productId == cart.productId);
+    if (index != -1) {
+      await cartBox.deleteAt(index);
+    }
   }
 }

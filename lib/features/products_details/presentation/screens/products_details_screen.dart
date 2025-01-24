@@ -46,7 +46,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         getCartItemsUseCase: di<GetCartItemsUseCase>(),
         userId: userId ?? '',
         removeFromCartUseCase: di<RemoveFromCartUseCase>(),
-        //  updateCartItemQuantityUseCase: di< UpdateCartItemQuantityUseCase>(),
+        updateCartItemQuantityUseCase: di<UpdateCartItemQuantityUseCase>(),
       ),
       child: Scaffold(
         body: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(

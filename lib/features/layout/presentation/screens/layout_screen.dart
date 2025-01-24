@@ -45,8 +45,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
         create: (context) => CartBloc(
           addToCartUseCase: di<AddToCartUseCase>(),
           getCartItemsUseCase: di<GetCartItemsUseCase>(),
-          userId: user.uid, removeFromCartUseCase: di<RemoveFromCartUseCase>(),
-          // updateCartItemQuantityUseCase: di< UpdateCartItemQuantityUseCase>(),
+          userId: user.uid, 
+          removeFromCartUseCase: di<RemoveFromCartUseCase>(),
+          updateCartItemQuantityUseCase: di< UpdateCartItemQuantityUseCase>(),
         ),
         child: CartScreen(userId: user.uid),
       ),
