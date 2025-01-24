@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/core/models/cart_model.dart';
-import 'package:e_commerce_app/features/cart/data/remot/cart_data_source.dart';
+import 'package:e_commerce_app/features/cart/data/local/cart_data_source.dart';
 import 'package:e_commerce_app/features/cart/domain/cart_repo.dart';
 
 class CartRepositoryImpl implements CartRepository {
