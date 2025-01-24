@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_app/core/error_handler/error_handler.dart';
 import 'package:e_commerce_app/core/models/cart_model.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_colors.dart';
@@ -28,7 +29,15 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CartBloc>().add(GetCartItemsEvent());
+    _loadCartItems();
+  }
+
+  void _loadCartItems() async {
+    try {
+      context.read<CartBloc>().add(GetCartItemsEvent());
+    } catch (error) {
+      ErrorHandler.handleError(context, error);
+    }
   }
 
   @override
@@ -47,9 +56,7 @@ class _CartScreenState extends State<CartScreen> {
       body: BlocListener<CartBloc, CartState>(
         listener: (context, state) {
           if (state is CartError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ErrorHandler.handleError(context, state.message);
           }
         },
         child: BlocBuilder<CartBloc, CartState>(
@@ -176,17 +183,21 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _updateQuantity(BuildContext context, Cart cartItem, int newQuantity) {
-    if (newQuantity > 0) {
-      context.read<CartBloc>().add(
-            UpdateCartItemQuantityEvent(
-              cartItem: cartItem,
-              newQuantity: newQuantity,
-            ),
-          );
-    } else {
-      context.read<CartBloc>().add(
-            RemoveFromCartEvent(cart: cartItem),
-          );
+    try {
+      if (newQuantity > 0) {
+        context.read<CartBloc>().add(
+              UpdateCartItemQuantityEvent(
+                cartItem: cartItem,
+                newQuantity: newQuantity,
+              ),
+            );
+      } else {
+        context.read<CartBloc>().add(
+              RemoveFromCartEvent(cart: cartItem),
+            );
+      }
+    } catch (error) {
+      ErrorHandler.handleError(context, error);
     }
   }
 }
