@@ -32,10 +32,12 @@ class FavoritesScreen extends StatelessWidget {
           final favoritesBox = Hive.box<Product>('favoritesBox_$userId');
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                'Favorites',
-                style: AppTextStyles.font22Bold
-                    .copyWith(color: AppColors.primaryColor),
+              title: Center(
+                child: Text(
+                  'Favorites',
+                  style: AppTextStyles.font22Bold
+                      .copyWith(color: AppColors.primaryColor),
+                ),
               ),
               automaticallyImplyLeading: false,
             ),
@@ -97,12 +99,13 @@ class FavoritesScreen extends StatelessWidget {
                                 title: Text(
                                   product.title,
                                   maxLines: 1,
-                                  style: AppTextStyles.font14Bold
+                                  style: AppTextStyles.font16Bold
                                       .copyWith(color: AppColors.textColor),
                                 ),
                                 subtitle: Text(
                                   '\$${product.price}',
-                                  style: AppTextStyles.font14Regular,
+                                  style: AppTextStyles.font14BoldBlack
+                                      .copyWith(color: AppColors.primaryColor),
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(

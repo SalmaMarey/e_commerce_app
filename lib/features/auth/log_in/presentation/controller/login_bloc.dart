@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:e_commerce_app/core/models/cart_model.dart';
 import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/domain/usecases/login_use_case.dart';
@@ -56,8 +57,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     print('Saving user to Hive...');
     final userBox = Hive.box<UserModel>('userBox');
     userBox.put(user.id, user);
-
     await Hive.openBox<Product>('favoritesBox_${user.id}');
+    await Hive.openBox<Cart>('cartBox_${user.id}');
     print('User data saved successfully in both Firebase and Hive.');
   }
 }
