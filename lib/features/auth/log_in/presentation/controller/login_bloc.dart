@@ -28,16 +28,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email,
           password: event.password,
         );
+
         if (userCredential.user != null) {
           DocumentSnapshot<Map<String, dynamic>> userDoc = await firestore
               .collection('e_users')
               .doc(userCredential.user!.uid)
               .get();
+
           if (userDoc.exists) {
             final userModel = UserModel.fromJson(userDoc.data()!);
-
             emit(LoginSuccess(user: userModel));
-
             saveUserToHive(userModel);
           } else {
             emit(LoginFailure(
@@ -46,9 +46,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         } else {
           emit(LoginFailure(error: 'User credentials are null or incomplete.'));
         }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'wrong-password') {
+          emit(LoginFailure(error: 'Wrong password, please try again.'));
+        } else if (e.code == 'user-not-found') {
+          emit(LoginFailure(error: 'User not found, please check your email.'));
+        } else if (e.code == 'invalid-email') {
+          emit(LoginFailure(error: 'Invalid email address.'));
+        } else {
+          emit(LoginFailure(error: 'Login failed: ${e.message}'));
+        }
       } catch (e) {
-        emit(LoginFailure(
-            error: 'An unexpected error occurred: ${e.toString()}'));
+        emit(LoginFailure(error: 'An unexpected error occurred: ${e.toString()}'));
       }
     });
   }
@@ -61,8 +70,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await Hive.openBox<Cart>('cartBox_${user.id}');
     print('User data saved successfully in both Firebase and Hive.');
   }
-}
-
-Future<void> initializeUserFavoritesBox(String userId) async {
-  await Hive.openBox<Product>('favoritesBox_$userId');
 }
