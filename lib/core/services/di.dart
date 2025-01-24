@@ -12,8 +12,8 @@ import 'package:e_commerce_app/features/auth/register/domain/usecases/register_u
 import 'package:e_commerce_app/features/auth/register/domain/register_repo.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/controller/register_bloc.dart';
 import 'package:e_commerce_app/features/cart/data/cart_repo_impl.dart';
-import 'package:e_commerce_app/features/cart/data/remot/cart_data_source.dart';
-import 'package:e_commerce_app/features/cart/data/remot/cart_data_source_impl.dart';
+import 'package:e_commerce_app/features/cart/data/local/cart_data_source.dart';
+import 'package:e_commerce_app/features/cart/data/local/cart_data_source_impl.dart';
 import 'package:e_commerce_app/features/cart/domain/cart_repo.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_usecase.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_item_usecase.dart';
