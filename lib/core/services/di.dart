@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/core/models/cart_model.dart';
 import 'package:e_commerce_app/core/models/product_model.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/login_repo_impl.dart';
 import 'package:e_commerce_app/features/auth/log_in/data/remote/login_data_source.dart';
@@ -10,6 +11,14 @@ import 'package:e_commerce_app/features/auth/register/data/remote/register_data_
 import 'package:e_commerce_app/features/auth/register/domain/usecases/register_use_case.dart';
 import 'package:e_commerce_app/features/auth/register/domain/register_repo.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/controller/register_bloc.dart';
+import 'package:e_commerce_app/features/cart/data/cart_repo_impl.dart';
+import 'package:e_commerce_app/features/cart/data/remot/cart_data_source.dart';
+import 'package:e_commerce_app/features/cart/data/remot/cart_data_source_impl.dart';
+import 'package:e_commerce_app/features/cart/domain/cart_repo.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_usecase.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_item_usecase.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/remove_from_cart_usecase.dart';
+import 'package:e_commerce_app/features/cart/domain/usecases/update_cart_item_quantity_usecase.dart';
 import 'package:e_commerce_app/features/home/data/home_repo_impl.dart';
 import 'package:e_commerce_app/features/home/data/remote/home_data_source.dart';
 import 'package:e_commerce_app/features/home/data/remote/home_data_source_impl.dart';
@@ -154,4 +163,25 @@ void setupServiceLocator() {
       checkFavoriteUseCase: di<CheckFavoriteUseCase>(param1: di<String>()),
     ),
   );
+
+  //cart
+
+  di.registerSingleton<Box<Cart>>(Hive.box('cartBox'));
+
+  // Register data source, repository, and use cases
+  di.registerSingleton<CartLocalDataSource>(CartLocalDataSourceImpl());
+  di.registerSingleton<CartRepository>(
+      CartRepositoryImpl(localDataSource: di()));
+  di.registerSingleton<AddToCartUseCase>(AddToCartUseCase(repository: di()));
+  di.registerSingleton<GetCartItemsUseCase>(
+      GetCartItemsUseCase(repository: di()));
+  di.registerSingleton<RemoveFromCartUseCase>(
+      RemoveFromCartUseCase(repository: di()));
+  di.registerSingleton<UpdateCartItemQuantityUseCase>(
+      UpdateCartItemQuantityUseCase(repository: di()));
+  // // Register BLoC
+  // di.registerFactory<CartBloc>(() => CartBloc(
+  //   addToCartUseCase: di<AddToCartUseCase>(),
+  //   getCartItemsUseCase: di<GetCartItemsUseCase>(),
+  // ));
 }
