@@ -163,7 +163,11 @@ void setupServiceLocator() {
       checkFavoriteUseCase: di<CheckFavoriteUseCase>(param1: di<String>()),
     ),
   );
-
+  // Register userId as a factory
+  di.registerFactory<String>(() {
+    final user = FirebaseAuth.instance.currentUser;
+    return user?.uid ?? '';
+  });
   //cart
 
   di.registerSingleton<Box<Cart>>(Hive.box('cartBox'));

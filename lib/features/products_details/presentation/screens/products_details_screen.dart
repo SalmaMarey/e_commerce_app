@@ -29,7 +29,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-
     context
         .read<ProductDetailsBloc>()
         .add(FetchProductDetailsEvent(widget.productId));
@@ -38,13 +37,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final userId = user?.uid;
+    final userId = user?.uid ?? '';
 
     return BlocProvider(
       create: (context) => CartBloc(
         addToCartUseCase: di<AddToCartUseCase>(),
         getCartItemsUseCase: di<GetCartItemsUseCase>(),
-        userId: userId ?? '',
+        userId: userId,
         removeFromCartUseCase: di<RemoveFromCartUseCase>(),
         updateCartItemQuantityUseCase: di<UpdateCartItemQuantityUseCase>(),
       ),
@@ -81,12 +80,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                     ),
-                    if (userId != null)
-                      AddToCartButton(
-                        price: product.price,
-                        product: product,
-                        userId: userId,
-                      ),
+                    AddToCartButton(
+                      price: product.price,
+                      product: product,
+                      userId: userId,
+                    ),
                   ],
                 ),
               );
