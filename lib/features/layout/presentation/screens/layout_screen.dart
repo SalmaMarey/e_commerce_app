@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:e_commerce_app/core/error_handler/error_handler.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/add_to_cart_usecase.dart';
 import 'package:e_commerce_app/features/cart/domain/usecases/get_cart_item_usecase.dart';
@@ -28,40 +29,51 @@ class _LayoutScreenState extends State<LayoutScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<Widget> get _pages {
-    final user = _auth.currentUser;
-    if (user == null) {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return [
+          const HomeScreen(),
+          const Center(child: Text('Please log in to view favorites')),
+          const Center(child: Text('Please log in to view cart')),
+          const Center(child: Text('Please log in to view profile')),
+        ];
+      }
+      print('User ID: ${user.uid}');
       return [
         const HomeScreen(),
-        const Center(child: Text('Please log in to view favorites')),
-        const Center(child: Text('Please log in to view cart')),
-        const Center(child: Text('Please log in to view profile')),
+        FavoritesScreen(userId: user.uid),
+        BlocProvider(
+          create: (context) => CartBloc(
+            addToCartUseCase: di<AddToCartUseCase>(),
+            getCartItemsUseCase: di<GetCartItemsUseCase>(),
+            userId: user.uid,
+            removeFromCartUseCase: di<RemoveFromCartUseCase>(),
+            updateCartItemQuantityUseCase: di<UpdateCartItemQuantityUseCase>(),
+          ),
+          child: CartScreen(userId: user.uid),
+        ),
+        BlocProvider(
+          create: (context) => di<ProfileBloc>(),
+          child: ProfileScreen(uid: user.uid),
+        ),
+      ];
+    } catch (e) {
+      ErrorHandler.handleError(context, 'Failed to load pages: $e');
+      return [
+        const Center(child: Text('An error occurred. Please try again.')),
       ];
     }
-    print('User ID: ${user.uid}');
-    return [
-      const HomeScreen(),
-      FavoritesScreen(userId: user.uid),
-      BlocProvider(
-        create: (context) => CartBloc(
-          addToCartUseCase: di<AddToCartUseCase>(),
-          getCartItemsUseCase: di<GetCartItemsUseCase>(),
-          userId: user.uid, 
-          removeFromCartUseCase: di<RemoveFromCartUseCase>(),
-          updateCartItemQuantityUseCase: di< UpdateCartItemQuantityUseCase>(),
-        ),
-        child: CartScreen(userId: user.uid),
-      ),
-      BlocProvider(
-        create: (context) => di<ProfileBloc>(),
-        child: ProfileScreen(uid: user.uid),
-      ),
-    ];
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    try {
+      setState(() {
+        _selectedIndex = index;
+      });
+    } catch (e) {
+      ErrorHandler.handleError(context, 'Failed to navigate: $e');
+    }
   }
 
   @override
