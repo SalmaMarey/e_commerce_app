@@ -8,12 +8,20 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this.homeDataSource);
 
   @override
-  Future<List<String>> getCategories() {
-    return homeDataSource.getCategories();
+  Future<List<String>> getCategories() async {
+    try {
+      return await homeDataSource.getCategories();
+    } catch (e) {
+      throw Exception('Failed to fetch categories: $e');
+    }
   }
 
   @override
-  Future<List<Product>> getProductsByCategory(String category) {
-    return homeDataSource.getProductsByCategory(category);
+  Future<List<Product>> getProductsByCategory(String category) async {
+    try {
+      return await homeDataSource.getProductsByCategory(category);
+    } catch (e) {
+      throw Exception('Failed to fetch products: $e');
+    }
   }
 }

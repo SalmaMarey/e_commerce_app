@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
+import 'package:e_commerce_app/core/error_handler/error_handler.dart';
 import 'package:e_commerce_app/core/services/di.dart';
 import 'package:e_commerce_app/core/themes/app_text_styles.dart';
 import 'package:e_commerce_app/core/utils/assets.dart';
@@ -19,6 +20,7 @@ import 'package:e_commerce_app/core/models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -77,7 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider(
       create: (context) => di<HomeBloc>()..add(FetchCategoriesEvent()),
       child: BlocListener<HomeBloc, HomeState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is HomeError) {
+            ErrorHandler.handleError(context, state.message);
+          }
+        },
         child: Scaffold(
           key: _scaffoldKey,
           drawer: DrawerWidget(
