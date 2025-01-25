@@ -1,16 +1,21 @@
 # e_commerce_app
+Built with:
+✨ BLoC Pattern: For clean and scalable state management.
+✨ Dependency Injection (DI): To keep the code modular and testable.
+✨ Clean Architecture: For maintainability and separation of concerns.
+✨ Firebase: Forauthentication, storage, and firestore database.
+✨ RESTful API Integration: Smooth backend communication.
+✨ Responsive UI: Sleek and intuitive design for all devices.
 
-A new Flutter project.
+Key Features:
+🔍 Product Search: Advanced search and filtering for easy product discovery.
+🔐 Authentication: Secure user login and registration.
+👤 Edit Profile: Users can update their details effortlessly.
+🛒 Cart: Add, remove, and manage items.
+❤️ Favorites: Save favorite products for quick access.
 
-## Getting Started
+Press here for the video:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<a href="https://drive.google.com/file/d/1snZsHZH9zB2m7C9WjZAkS9_eWLiTnKRS/view?usp=sharing">
+    <img src="https://i.imgur.com/obmeyt7.png" alt="Video Thumbnail" width="150">
+</a>
