@@ -9,6 +9,10 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
 
   @override
   Future<Product> getProductDetails(int productId) async {
-    return await productDetailsDataSource.getProductDetails(productId);
+    try {
+      return await productDetailsDataSource.getProductDetails(productId);
+    } catch (e) {
+      throw Exception('Failed to fetch product details: $e');
+    }
   }
 }

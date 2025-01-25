@@ -48,7 +48,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         updateCartItemQuantityUseCase: di<UpdateCartItemQuantityUseCase>(),
       ),
       child: Scaffold(
-        body: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+        body: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
+          listener: (context, state) {
+            if (state is ProductDetailsError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             if (state is ProductDetailsLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -89,7 +99,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               );
             } else if (state is ProductDetailsError) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Text(
+                  state.message,
+                  style: TextStyle(fontSize: 16.sp, color: Colors.red),
+                ),
+              );
             }
             return const SizedBox();
           },
