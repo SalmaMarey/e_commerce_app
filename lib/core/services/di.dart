@@ -69,6 +69,7 @@ void setupServiceLocator() {
   di.registerFactory(() => RegisterBloc(di<RegisterUseCase>()));
 
   //login
+
   di.registerLazySingleton<LoginDataSource>(
     () => LoginDataSourceImpl(
       firebaseAuth: di(),
@@ -79,9 +80,10 @@ void setupServiceLocator() {
     () => LoginRepositoryImpl(loginDataSource: di()),
   );
   di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
+
   di.registerFactory(() => LoginBloc(
         loginUseCase: di(),
-        firestore: di(),
+        firestore: di<FirebaseFirestore>(),
       ));
   //profile
   di.registerLazySingleton<ProfileRemoteDataSource>(
