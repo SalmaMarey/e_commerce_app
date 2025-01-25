@@ -66,7 +66,11 @@ class _CartScreenState extends State<CartScreen> {
             } else if (state is CartLoaded) {
               final cartItems = state.cartItems ?? [];
               if (cartItems.isEmpty) {
-                return const Center(child: Text('Your cart is empty'));
+                return Center(
+                    child: Text(
+                  'Your cart is empty',
+                  style: AppTextStyles.font16BoldPrimaryColor,
+                ));
               }
               return ListView.builder(
                 itemCount: cartItems.length,
@@ -95,13 +99,13 @@ class _CartScreenState extends State<CartScreen> {
                     },
                     child: Card(
                       elevation: 4,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                       child: ListTile(
                         leading: CachedNetworkImage(
                           imageUrl: cartItem.imageUrl,
-                          width: 60,
-                          height: 60,
+                          width: 60.w,
+                          height: 60.h,
                           placeholder: (context, url) => const Center(
                             child: CircularProgressIndicator(),
                           ),
