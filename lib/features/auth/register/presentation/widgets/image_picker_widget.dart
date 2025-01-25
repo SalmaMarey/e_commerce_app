@@ -1,5 +1,4 @@
 // ignore_for_file: file_names
-
 import 'dart:io';
 import 'package:e_commerce_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ class ImagePickerWidget extends StatefulWidget {
   const ImagePickerWidget({required this.onImagePicked, super.key});
 
   @override
-    State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
+  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
@@ -28,6 +27,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       widget.onImagePicked(selectedImage);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -41,7 +41,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 fit: BoxFit.cover,
               )
             : Image.asset(
-              Assets.uploadPhoto,
+                Assets.uploadPhoto,
                 height: 90,
                 width: 90,
                 fit: BoxFit.cover,

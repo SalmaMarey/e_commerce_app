@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/core/network/internet_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:e_commerce_app/core/models/user_model.dart';
 import 'package:e_commerce_app/features/auth/register/data/remote/register_data_source.dart';
@@ -11,14 +12,20 @@ class RegisterRepositoryImpl implements RegisterRepository {
 
   @override
   Future<void> saveUser(UserModel user) async {
-    UserCredential userCredential =
-        await firebaseAuth.createUserWithEmailAndPassword(
-      email: user.email,
-      password: user.password,
-    );
-
-    user.id = userCredential.user?.uid ?? '';
-
-    await registerDataSource.saveUser(user);
+    try {
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: user.email,
+        password: user.password,
+      );
+      user.id = userCredential.user?.uid ?? '';
+      await registerDataSource.saveUser(user);
+    } on FirebaseAuthException catch (e) {
+      throw NetworkException('Firebase Auth error: ${e.message}');
+    } on NetworkException catch (e) {
+      throw NetworkException(e.message);
+    } on Exception catch (e) {
+      throw NetworkException('An unexpected error occurred: ${e.toString()}');
+    }
   }
 }

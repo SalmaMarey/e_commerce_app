@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
 import 'package:e_commerce_app/core/models/user_model.dart';
+import 'package:e_commerce_app/core/network/internet_checker.dart';
 import 'package:e_commerce_app/core/routing/routes.dart';
 import 'package:e_commerce_app/core/utils/widgets/custom_button.dart';
 import 'package:e_commerce_app/features/auth/register/presentation/controller/register_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:e_commerce_app/features/auth/register/presentation/controller/re
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -27,7 +27,7 @@ class RegisterButton extends StatelessWidget {
     required this.phoneController,
     required this.passwordController,
     required this.selectedImage,
-    required this.userNameController
+    required this.userNameController,
   });
 
   @override
@@ -41,16 +41,14 @@ class RegisterButton extends StatelessWidget {
             if (isEmailUsed) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                    content: Text('Email already registered. Please log in.')),
+                  content: Text('Email already registered. Please log in.'),
+                ),
               );
-              // Navigator.pushNamed(context, Routes.login);
               return;
             }
-
             final imageUrl = selectedImage != null
                 ? await _uploadImage(context, selectedImage!)
                 : 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png';
-
             final user = UserModel(
               id: DateTime.now().toString(),
               email: emailController.text,
@@ -63,9 +61,17 @@ class RegisterButton extends StatelessWidget {
             final userBox = Hive.box<UserModel>('userBox');
             userBox.put(user.id, user);
             Navigator.pushNamed(context, Routes.onBoarding);
-          } catch (e) {
+          } on FirebaseException catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to save user: $e')),
+              SnackBar(content: Text('Firebase error: ${e.message}')),
+            );
+          } on NetworkException catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Network error: ${e.message}')),
+            );
+          } on Exception catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('An unexpected error occurred: $e')),
             );
           }
         } else {
@@ -85,7 +91,9 @@ class RegisterButton extends StatelessWidget {
           .get();
 
       return snapshot.docs.isNotEmpty;
-    } catch (e) {
+    } on FirebaseException catch (e) {
+      throw NetworkException('Failed to check email: ${e.message}');
+    } on Exception catch (e) {
       throw Exception('Failed to check email: $e');
     }
   }
@@ -105,8 +113,14 @@ class RegisterButton extends StatelessWidget {
           .child('user_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
 
       final uploadTask = await storageRef.putFile(image);
-      return await uploadTask.ref.getDownloadURL();
-    } catch (e) {
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
+      Navigator.of(context).pop();
+
+      return downloadUrl;
+    } on FirebaseException catch (e) {
+      Navigator.of(context).pop();
+      throw NetworkException('Failed to upload image: ${e.message}');
+    } on Exception catch (e) {
       Navigator.of(context).pop();
       throw Exception('Failed to upload image: $e');
     }
