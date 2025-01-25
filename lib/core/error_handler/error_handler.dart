@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/core/network/internet_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ErrorHandler {
@@ -17,16 +18,12 @@ class ErrorHandler {
     } else if (error is String) {
       errorMessage = error;
     }
-
-    // Show error message to the user
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(errorMessage),
         backgroundColor: Colors.red,
       ),
     );
-
-    // Log the error for debugging
     debugPrint('Error: $error');
   }
 }
