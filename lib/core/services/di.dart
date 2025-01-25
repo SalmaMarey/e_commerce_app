@@ -38,6 +38,7 @@ import 'package:e_commerce_app/features/profile/data/profile_repository_impl.dar
 import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source.dart';
 import 'package:e_commerce_app/features/profile/data/remote/profile_remote_data_source_impl.dart';
 import 'package:e_commerce_app/features/profile/domain/profile_repository.dart';
+import 'package:e_commerce_app/features/profile/domain/use_cases/change_password_use_case.dart';
 import 'package:e_commerce_app/features/profile/domain/use_cases/fetch_profile.dart';
 import 'package:e_commerce_app/features/profile/domain/use_cases/update_profile.dart';
 import 'package:e_commerce_app/features/profile/presentation/controller/profile_bloc.dart';
@@ -52,20 +53,14 @@ import '../../features/products_details/data/products_details_repo_impl.dart';
 
 final di = GetIt.instance;
 
-void setupServiceLocator() async {
-  // Initialize Hive
-  await Hive.initFlutter();
-  await Hive.openBox<Product>('favoritesBox');
-  await Hive.openBox<Cart>('cartBox');
-
-  // Register Hive
+void setupServiceLocator() {
+  // Hive
   di.registerLazySingleton(() => Hive);
-
   // Firebase services
   di.registerLazySingleton(() => FirebaseFirestore.instance);
   di.registerLazySingleton(() => FirebaseAuth.instance);
 
-  // Register
+  //register
   di.registerLazySingleton<RegisterDataSource>(
       () => RegisterDataSourceImpl(di<FirebaseFirestore>()));
   di.registerLazySingleton<RegisterRepository>(() =>
@@ -73,7 +68,8 @@ void setupServiceLocator() async {
   di.registerLazySingleton(() => RegisterUseCase(di<RegisterRepository>()));
   di.registerFactory(() => RegisterBloc(di<RegisterUseCase>()));
 
-  // Login
+  //login
+
   di.registerLazySingleton<LoginDataSource>(
     () => LoginDataSourceImpl(
       firebaseAuth: di(),
@@ -84,12 +80,12 @@ void setupServiceLocator() async {
     () => LoginRepositoryImpl(loginDataSource: di()),
   );
   di.registerLazySingleton(() => LoginUseCase(loginRepository: di()));
+
   di.registerFactory(() => LoginBloc(
         loginUseCase: di(),
         firestore: di<FirebaseFirestore>(),
       ));
-
-  // Profile
+  //profile
   di.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(di(), di()),
   );
@@ -102,56 +98,55 @@ void setupServiceLocator() async {
   // Repository
   di.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(
-      di<ProfileRemoteDataSource>(),
-      di<ProfileLocalDataSource>(),
-    ),
+        di.get<ProfileRemoteDataSource>(), di.get<ProfileLocalDataSource>()),
   );
 
   // Use Cases
   di.registerLazySingleton<FetchProfileUseCase>(
-    () => FetchProfileUseCase(di<ProfileRepository>()),
+    () => FetchProfileUseCase(di.get<ProfileRepository>()),
   );
+
   di.registerLazySingleton<UpdateProfileUseCase>(
-    () => UpdateProfileUseCase(di<ProfileRepository>()),
+    () => UpdateProfileUseCase(di.get<ProfileRepository>()),
   );
+
+  // BLoC
+  di.registerLazySingleton(() => ChangePasswordUseCase(di()));
 
   // BLoC
   di.registerFactory(() => ProfileBloc(di(), di(), di()));
 
-  // Home
-  di.registerLazySingleton<HomeDataSource>(
-    () => HomeDataSourceImpl(di<Dio>()),
-  );
+  //home
+// BLoC
+  di.registerFactory(() =>
+      HomeBloc(di<GetCategoriesUseCase>(), di<GetProductsByCategoryUseCase>()));
 
-  // Register Repository
-  di.registerLazySingleton<HomeRepository>(
-    () => HomeRepositoryImpl(di<HomeDataSource>()),
-  );
+// UseCase
+  di.registerLazySingleton(() => GetCategoriesUseCase(di()));
+  di.registerLazySingleton(() => GetProductsByCategoryUseCase(di()));
 
-  // Register UseCases
-  di.registerLazySingleton(() => GetCategoriesUseCase(di<HomeRepository>()));
-  di.registerLazySingleton(() => GetProductsByCategoryUseCase(di<HomeRepository>()));
+// Repository
+  di.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(di()));
 
-  // Register BLoC
-  di.registerFactory(() => HomeBloc(di<GetCategoriesUseCase>(), di<GetProductsByCategoryUseCase>()));
+// DataSource
+  di.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(di()));
 
-  // External
-  di.registerLazySingleton<Dio>(() => Dio());
+// External
+
+  di.registerSingleton<Dio>(Dio());
 
   // Register Hive Box
-  di.registerLazySingleton<Box<Product>>(() => Hive.box('favoritesBox'));
-  di.registerLazySingleton<Box<Cart>>(() => Hive.box('cartBox'));
+  di.registerSingleton<Box<Product>>(Hive.box('favoritesBox'));
 
-  // Product Details
-  di.registerLazySingleton<ProductDetailsDataSource>(
+  di.registerFactory<ProductDetailsDataSource>(
     () => ProductDetailsDataSourceImpl(di<Dio>()),
   );
 
-  di.registerLazySingleton<ProductDetailsRepository>(
+  di.registerFactory<ProductDetailsRepository>(
     () => ProductDetailsRepositoryImpl(di<ProductDetailsDataSource>()),
   );
 
-  di.registerLazySingleton<GetProductDetailsUseCase>(
+  di.registerFactory<GetProductDetailsUseCase>(
     () => GetProductDetailsUseCase(di<ProductDetailsRepository>()),
   );
 
@@ -163,41 +158,36 @@ void setupServiceLocator() async {
     (userId, _) => CheckFavoriteUseCase(userId),
   );
 
-  di.registerFactory(() => ProductDetailsBloc(
-    getProductDetailsUseCase: di<GetProductDetailsUseCase>(),
-    toggleFavoriteUseCase: di<ToggleFavoriteUseCase>(param1: di<String>()),
-    checkFavoriteUseCase: di<CheckFavoriteUseCase>(param1: di<String>()),
-  ));
-
+  di.registerFactory<ProductDetailsBloc>(
+    () => ProductDetailsBloc(
+      getProductDetailsUseCase: di<GetProductDetailsUseCase>(),
+      toggleFavoriteUseCase: di<ToggleFavoriteUseCase>(param1: di<String>()),
+      checkFavoriteUseCase: di<CheckFavoriteUseCase>(param1: di<String>()),
+    ),
+  );
   // Register userId as a factory
   di.registerFactory<String>(() {
     final user = FirebaseAuth.instance.currentUser;
     return user?.uid ?? '';
   });
+  //cart
 
-  // Cart
-  di.registerLazySingleton<CartLocalDataSource>(() => CartLocalDataSourceImpl());
-  di.registerLazySingleton<CartRepository>(
-    () => CartRepositoryImpl(localDataSource: di()),
-  );
-  di.registerLazySingleton<AddToCartUseCase>(
-    () => AddToCartUseCase(repository: di()),
-  );
-  di.registerLazySingleton<GetCartItemsUseCase>(
-    () => GetCartItemsUseCase(repository: di()),
-  );
-  di.registerLazySingleton<RemoveFromCartUseCase>(
-    () => RemoveFromCartUseCase(repository: di()),
-  );
-  di.registerLazySingleton<UpdateCartItemQuantityUseCase>(
-    () => UpdateCartItemQuantityUseCase(repository: di()),
-  );
+  di.registerSingleton<Box<Cart>>(Hive.box('cartBox'));
 
+  // Register data source, repository, and use cases
+  di.registerSingleton<CartLocalDataSource>(CartLocalDataSourceImpl());
+  di.registerSingleton<CartRepository>(
+      CartRepositoryImpl(localDataSource: di()));
+  di.registerSingleton<AddToCartUseCase>(AddToCartUseCase(repository: di()));
+  di.registerSingleton<GetCartItemsUseCase>(
+      GetCartItemsUseCase(repository: di()));
+  di.registerSingleton<RemoveFromCartUseCase>(
+      RemoveFromCartUseCase(repository: di()));
+  di.registerSingleton<UpdateCartItemQuantityUseCase>(
+      UpdateCartItemQuantityUseCase(repository: di()));
   // // Register BLoC
-  // di.registerFactory(() => CartBloc(
+  // di.registerFactory<CartBloc>(() => CartBloc(
   //   addToCartUseCase: di<AddToCartUseCase>(),
   //   getCartItemsUseCase: di<GetCartItemsUseCase>(),
-  //   removeFromCartUseCase: di<RemoveFromCartUseCase>(),
-  //   updateCartItemQuantityUseCase: di<UpdateCartItemQuantityUseCase>(),
   // ));
 }
